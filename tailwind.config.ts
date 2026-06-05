@@ -25,6 +25,9 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
       },
+      spacing: {
+        18: '4.5rem', // 72px — para pt-18 en el layout admin mobile
+      },
     },
   },
   plugins: [],
