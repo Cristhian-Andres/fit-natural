@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Fit Natural — Alimentos artesanales saludables. Catálogo 2026.">
+  <title>Fit Natural 🌿 Catálogo 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:      #1b5e20;
+      --primary-mid:  #2e7d32;
+      --primary-lt:   #43a047;
+      --secondary:    #66bb6a;
+      --accent-bg:    #f1f8e9;
+      --card-bg:      #fff;
+      --text:         #1a2e1a;
+      --muted:        #6a7c6a;
+      --border:       #dcedc8;
+      --shadow-sm:    0 1px 6px rgba(0,0,0,.07);
+      --shadow:       0 2px 16px rgba(27,94,32,.10);
+      --shadow-hover: 0 8px 28px rgba(27,94,32,.17);
+      --wa:           #25d366;
+      --wa-dk:        #128c48;
+      --r:            14px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--accent-bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(145deg, #1b5e20 0%, #2e7d32 55%, #43a047 100%);
+      color: #fff;
+      padding: 3rem 1.5rem 5.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23fff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .header-inner { position: relative; z-index: 1; }
+    .brand {
+      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      margin-bottom: .45rem;
+    }
+    .header-tagline { font-size: clamp(.85rem,2.5vw,1rem); opacity: .82; margin-bottom: 1.4rem; }
+    .header-actions { display: flex; justify-content: center; gap: .7rem; flex-wrap: wrap; }
+    .header-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .5rem 1.15rem;
+      border-radius: 50px;
+      font-size: .82rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform .15s, background .2s;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+    }
+    .header-btn:hover { transform: scale(1.04); }
+    .btn-outline { background: rgba(255,255,255,.15); color: #fff; border: 1.5px solid rgba(255,255,255,.4); }
+    .btn-outline:hover { background: rgba(255,255,255,.25); }
+    .btn-wa { background: var(--wa); color: #fff; }
+    .btn-wa:hover { background: var(--wa-dk); }
+    .header-wave { position: absolute; bottom: -1px; left: 0; width: 100%; height: 56px; pointer-events: none; }
+
+    /* ── STATS ── */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      padding: .9rem 1.5rem;
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-n { font-size: 1.5rem; font-weight: 800; color: var(--primary); line-height: 1; }
+    .stat-l { font-size: .7rem; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-top: .1rem; }
+
+    /* ── STICKY SEARCH BAR ── */
+    .search-bar {
+      position: sticky;
+      top: 0;
+      z-index: 300;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(0,0,0,.07);
+      padding: .7rem 1.5rem;
+    }
+    .search-inner { display: flex; align-items: center; gap: .75rem; max-width: 1400px; margin: 0 auto; }
+    .search-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      background: var(--accent-bg);
+      border: 2px solid var(--border);
+      border-radius: 50px;
+      padding: .5rem 1.1rem;
+      gap: .45rem;
+      transition: border-color .2s;
+    }
+    .search-wrap:focus-within { border-color: var(--secondary); }
+    .search-wrap input {
+      border: none; background: transparent;
+      font-family: inherit; font-size: .93rem; color: var(--text); width: 100%; outline: none;
+    }
+    .search-wrap input::placeholder { color: var(--muted); }
+    .search-ico { color: var(--muted); font-size: .95rem; }
+
+    /* mobile filter toggle */
+    .filter-toggle-btn {
+      display: none;
+      align-items: center;
+      gap: .4rem;
+      padding: .5rem .9rem;
+      background: var(--accent-bg);
+      border: 2px solid var(--border);
+      border-radius: 50px;
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--primary-mid);
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+    .filter-toggle-btn.has-filter { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .filter-badge {
+      display: none;
+      background: #fff;
+      color: var(--primary);
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: .7rem;
+      font-weight: 800;
+      align-items: center;
+      justify-content: center;
+    }
+    .filter-badge.show { display: flex; }
+
+    /* ── PAGE BODY ── */
+    .page-body {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 3rem;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 238px;
+      flex-shrink: 0;
+      position: sticky;
+      top: calc(57px + 1rem);
+      max-height: calc(100vh - 80px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .sidebar-card {
+      background: #fff;
+      border-radius: var(--r);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    /* active filters chip row */
+    .active-chips {
+      display: none;
+      flex-wrap: wrap;
+      gap: .4rem;
+      padding: .75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .active-chips.visible { display: flex; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .3rem;
+      padding: .22rem .65rem;
+      background: #e8f5e9;
+      color: var(--primary);
+      border-radius: 50px;
+      font-size: .75rem;
+      font-weight: 600;
+    }
+    .chip-x {
+      cursor: pointer;
+      opacity: .6;
+      line-height: 1;
+      font-weight: 800;
+    }
+    .chip-x:hover { opacity: 1; }
+
+    /* filter group */
+    .filter-group { border-bottom: 1px solid var(--border); }
+    .filter-group:last-child { border-bottom: none; }
+    .filter-group-hd {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .85rem 1rem .6rem;
+    }
+    .filter-group-title {
+      font-size: .78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      color: var(--text);
+    }
+    .filter-clear-link {
+      font-size: .73rem;
+      font-weight: 600;
+      color: var(--primary-mid);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      display: none;
+    }
+    .filter-clear-link.show { display: block; }
+
+    .filter-list { list-style: none; padding: 0 .5rem .6rem; }
+    .filter-item {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .45rem .65rem;
+      border-radius: 8px;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: background .15s, border-color .15s;
+      user-select: none;
+    }
+    .filter-item:hover { background: var(--accent-bg); }
+    .filter-item.active {
+      background: #e8f5e9;
+      border-left-color: var(--primary-mid);
+    }
+    .filter-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      opacity: .75;
+    }
+    .filter-item.active .filter-dot { opacity: 1; }
+    .filter-name {
+      font-size: .84rem;
+      font-weight: 500;
+      color: var(--text);
+      flex: 1;
+      line-height: 1.3;
+    }
+    .filter-item.active .filter-name { font-weight: 700; color: var(--primary); }
+    .filter-count {
+      font-size: .72rem;
+      font-weight: 600;
+      padding: .1rem .45rem;
+      border-radius: 50px;
+      background: #f0f0f0;
+      color: var(--muted);
+      flex-shrink: 0;
+      min-width: 22px;
+      text-align: center;
+    }
+    .filter-item.active .filter-count { background: #c8e6c9; color: var(--primary); }
+    .filter-count.zero { opacity: .35; }
+
+    /* price range item (no dot, just check-style) */
+    .filter-item-price .filter-dot { display: none; }
+    .filter-item-price .price-ico {
+      font-size: .8rem;
+      width: 20px;
+      text-align: center;
+    }
+
+    /* ── CONTENT AREA ── */
+    .content { flex: 1; min-width: 0; }
+
+    .results-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .results-txt { font-size: .86rem; color: var(--muted); }
+    .results-txt strong { color: var(--primary-mid); font-weight: 700; }
+    .results-sort {
+      font-size: .82rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+    }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+      gap: 1.2rem;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform .22s, box-shadow .22s;
+      animation: fadeUp .35s ease both;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .card-stripe { height: 4px; }
+    .card-body { padding: 1.1rem; flex: 1; display: flex; flex-direction: column; }
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: .4rem;
+      margin-bottom: .8rem;
+    }
+    .card-emoji { font-size: 2.6rem; line-height: 1; }
+    .cat-badge {
+      font-size: .67rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+      padding: .22rem .65rem;
+      border-radius: 50px;
+      white-space: nowrap;
+      line-height: 1.4;
+    }
+    .product-name {
+      font-size: 1.02rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: .3rem;
+    }
+    .product-desc {
+      font-size: .8rem;
+      color: var(--muted);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: .65rem;
+    }
+    .flavors { margin-bottom: .65rem; }
+    .flavors-lbl {
+      font-size: .67rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--muted);
+      margin-bottom: .25rem;
+    }
+    .flavor-list { display: flex; flex-wrap: wrap; gap: .25rem; }
+    .flavor-tag {
+      font-size: .7rem;
+      padding: .15rem .5rem;
+      background: var(--accent-bg);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      color: var(--muted);
+    }
+    .prices {
+      margin-top: auto;
+      padding-top: .65rem;
+      border-top: 1px solid var(--border);
+    }
+    .price-single { font-size: 1.38rem; font-weight: 800; color: var(--primary); }
+    .price-size-lbl { font-size: .8rem; color: var(--muted); margin-left: .25rem; }
+    .price-desde { font-size: .7rem; color: var(--muted); margin-bottom: .2rem; }
+    .price-row-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: .15rem 0;
+    }
+    .price-row-lbl { font-size: .8rem; color: var(--muted); }
+    .price-row-val { font-size: .88rem; font-weight: 700; color: var(--primary-mid); }
+    .card-footer { padding: .85rem 1.1rem; }
+    .wa-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem;
+      width: 100%;
+      padding: .65rem 1rem;
+      background: var(--wa);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: .86rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .18s, transform .15s;
+      font-family: inherit;
+    }
+    .wa-btn:hover { background: var(--wa-dk); transform: scale(1.02); }
+    .wa-svg { width: 17px; height: 17px; flex-shrink: 0; }
+
+    /* ── EMPTY ── */
+    .empty { grid-column: 1/-1; text-align: center; padding: 3.5rem 2rem; }
+    .empty-ico { font-size: 3.2rem; margin-bottom: .6rem; }
+    .empty h3 { font-size: 1.15rem; margin-bottom: .35rem; }
+    .empty p { color: var(--muted); font-size: .88rem; }
+
+    /* ── MOBILE OVERLAY ── */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 400;
+      backdrop-filter: blur(2px);
+    }
+    .sidebar-overlay.show { display: block; }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: linear-gradient(135deg,#1b5e20,#2e7d32);
+      color: #fff;
+      padding: 2.5rem 1.5rem 2rem;
+      text-align: center;
+    }
+    .footer-brand { font-size: 1.8rem; font-weight: 900; margin-bottom: .25rem; }
+    .footer-sub { opacity: .72; font-size: .88rem; margin-bottom: 1.3rem; }
+    .footer-contacts { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: .75rem; }
+    .footer-link {
+      display: flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .86rem;
+      color: #fff;
+      text-decoration: none;
+      opacity: .88;
+      transition: opacity .2s;
+    }
+    .footer-link:hover { opacity: 1; text-decoration: underline; }
+    .footer-copy { margin-top: 1.2rem; font-size: .72rem; opacity: .4; }
+
+    /* ── SCROLL TOP ── */
+    #scrollTop {
+      position: fixed;
+      bottom: 1.4rem;
+      right: 1.4rem;
+      width: 44px;
+      height: 44px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.25rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,.22);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+      transition: background .2s;
+    }
+    #scrollTop.show { display: flex; }
+    #scrollTop:hover { background: var(--primary-lt); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+    }
+
+    @media (max-width: 768px) {
+      .filter-toggle-btn { display: flex; }
+
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: -110%;
+        width: min(300px, 85vw);
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0 var(--r) var(--r) 0;
+        z-index: 450;
+        overflow-y: auto;
+        transition: left .28s cubic-bezier(.25,.8,.25,1);
+        background: #fff;
+        box-shadow: 4px 0 24px rgba(0,0,0,.15);
+      }
+      .sidebar.open { left: 0; }
+      .sidebar-card { border-radius: 0; box-shadow: none; }
+
+      .sidebar-mobile-hd {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1rem .7rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .sidebar-mobile-hd span { font-size: 1rem; font-weight: 800; }
+      .sidebar-close {
+        width: 32px; height: 32px;
+        background: var(--accent-bg);
+        border: none;
+        border-radius: 50%;
+        font-size: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .page-body { padding: 1rem 1rem 2.5rem; gap: 0; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .85rem; }
+    }
+
+    @media (max-width: 480px) {
+      .grid { grid-template-columns: 1fr 1fr; gap: .7rem; }
+      .card-body { padding: .8rem; }
+      .card-emoji { font-size: 2.1rem; }
+      .product-name { font-size: .9rem; }
+      .price-single { font-size: 1.15rem; }
+    }
+    @media (max-width: 360px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .sidebar-mobile-hd { display: none; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="brand">🌿 Fit Natural</div>
+    <p class="header-tagline">Alimentos artesanales · Sin conservantes · Hechos con amor</p>
+    <div class="header-actions">
+      <a href="Catalogo%20Fit%20Natural%202026.pdf" target="_blank" class="header-btn btn-outline">📄 Ver PDF original</a>
+      <a href="https://wa.me/573148375549" target="_blank" rel="noopener" class="header-btn btn-wa">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Contactar a Hary
+      </a>
+    </div>
+  </div>
+  <svg class="header-wave" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 56" preserveAspectRatio="none">
+    <path fill="#f1f8e9" d="M0,35 C360,-5 1080,65 1440,28 L1440,56 L0,56 Z"/>
+  </svg>
+</header>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-n" id="statTotal">37</div><div class="stat-l">Productos</div></div>
+  <div class="stat"><div class="stat-n">11</div><div class="stat-l">Categorías</div></div>
+  <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Natural</div></div>
+  <div class="stat"><div class="stat-n">0</div><div class="stat-l">Conservantes</div></div>
+</div>
+
+<!-- STICKY SEARCH BAR -->
+<div class="search-bar">
+  <div class="search-inner">
+    <button class="filter-toggle-btn" id="filterToggleBtn" onclick="toggleSidebar()">
+      ☰ Filtros
+      <span class="filter-badge" id="filterBadge"></span>
+    </button>
+    <div class="search-wrap">
+      <span class="search-ico">🔍</span>
+      <input id="searchInput" type="search" placeholder="Buscar productos, sabores…" autocomplete="off">
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- PAGE BODY -->
+<div class="page-body">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-mobile-hd">
+      <span>🔧 Filtros</span>
+      <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+    </div>
+    <div class="sidebar-card">
+
+      <!-- Active chips -->
+      <div class="active-chips" id="activeChips"></div>
+
+      <!-- CATEGORIES -->
+      <div class="filter-group">
+        <div class="filter-group-hd">
+          <span class="filter-group-title">Categorías</span>
+          <button class="filter-clear-link" id="clearCatBtn" onclick="setCat('all')">Limpiar</button>
+        </div>
+        <ul class="filter-list" id="catList"></ul>
+      </div>
+
+      <!-- PRICE -->
+      <div class="filter-group">
+        <div class="filter-group-hd">
+          <span class="filter-group-title">Precio</span>
+          <button class="filter-clear-link" id="clearPriceBtn" onclick="setPrice('all')">Limpiar</button>
+        </div>
+        <ul class="filter-list" id="priceList"></ul>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- ── CONTENT ── -->
+  <main class="content">
+    <div class="results-bar">
+      <p class="results-txt" id="resultsInfo"></p>
+    </div>
+    <div class="grid" id="grid"></div>
+  </main>
+
+</div><!-- /page-body -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-brand">🌿 Fit Natural</div>
+  <p class="footer-sub">Alimentos artesanales · Sin conservantes · Con amor</p>
+  <div class="footer-contacts">
+    <a href="https://wa.me/573148375549" target="_blank" rel="noopener" class="footer-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      314 837 5549
+    </a>
+    <a href="https://wa.me/573216966789" target="_blank" rel="noopener" class="footer-link">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      321 696 6789
+    </a>
+    <span class="footer-link">📷 @FITNATURAL_POP</span>
+  </div>
+  <p class="footer-copy">© 2026 Fit Natural · Hary Cabezas</p>
+</footer>
+
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Subir">↑</button>
+
+<script>
+/* ─── CATEGORÍAS ─── */
+const CATS = {
+  all:             { name:'Todos',             emoji:'🌿', color:'#2e7d32', light:'#e8f5e9' },
+  granolas:        { name:'Granolas',          emoji:'🥣', color:'#e65100', light:'#fff3e0' },
+  panaderia:       { name:'Panadería',         emoji:'🍞', color:'#6d4c41', light:'#efebe9' },
+  snacks:          { name:'Snacks',            emoji:'🍿', color:'#f57f17', light:'#fffde7' },
+  'frutos-secos':  { name:'Frutos Secos',      emoji:'🥜', color:'#558b2f', light:'#f1f8e9' },
+  lacteos:         { name:'Lácteos',           emoji:'🥛', color:'#0277bd', light:'#e1f5fe' },
+  suplementos:     { name:'Suplementos',       emoji:'✨', color:'#6a1b9a', light:'#f3e5f5' },
+  aceites:         { name:'Aceites & Vinagres',emoji:'🫙', color:'#00695c', light:'#e0f2f1' },
+  harinas:         { name:'Harinas & Mezclas', emoji:'🌾', color:'#ef6c00', light:'#fff8e1' },
+  cremas:          { name:'Cremas Untables',   emoji:'🍫', color:'#4e342e', light:'#efebe9' },
+  bebidas:         { name:'Bebidas',           emoji:'💧', color:'#0097a7', light:'#e0f7fa' },
+  edulcorantes:    { name:'Edulcorantes',      emoji:'🍃', color:'#2e7d32', light:'#e8f5e9' },
+};
+
+const PRICES = [
+  { id:'all', label:'Todos los precios', ico:'💰', min:0,     max:Infinity },
+  { id:'p1',  label:'Hasta $10.000',     ico:'💵', min:0,     max:10000    },
+  { id:'p2',  label:'$10.000 – $30.000', ico:'💵', min:10001, max:30000    },
+  { id:'p3',  label:'$30.000 – $80.000', ico:'💵', min:30001, max:80000    },
+  { id:'p4',  label:'Más de $80.000',    ico:'💎', min:80001, max:Infinity },
+];
+
+/* ─── PRODUCTOS ─── */
+const PRODUCTS = [
+  { id:1,  name:'Granola Artesanal',            category:'granolas',     emoji:'🥣',
+    desc:'Granola artesanal libre de azúcar añadida. Perfecta para el desayuno.',
+    flavors:['Canela','Cacao'],
+    variants:[{l:'Unidad',p:15000}] },
+  { id:2,  name:'Granola Premium con Proteína', category:'granolas',     emoji:'💪',
+    desc:'Excelente fuente de proteína y fibra. Semillas, frutos secos, aceite de coco y stevia.',
+    variants:[{l:'300gr',p:39000}] },
+  { id:3,  name:'Pan Integral Artesanal',       category:'panaderia',    emoji:'🍞',
+    desc:'Panes integrales artesanales horneados cada día. Sin aditivos ni conservantes.',
+    variants:[{l:'Mogolla Integral',p:9800},{l:'Tostada Integral',p:8300},{l:'Pan Tajado',p:6300}] },
+  { id:4,  name:'Galletas Artesanales',         category:'snacks',       emoji:'🍪',
+    desc:'Galletas artesanales horneadas con ingredientes naturales seleccionados.',
+    flavors:['Sal Marina','Chocolate'],
+    variants:[{l:'Unidad',p:14000}] },
+  { id:5,  name:'Crispetas con Proteína',       category:'snacks',       emoji:'🍿',
+    desc:'Crispetas artesanales enriquecidas con proteína. El snack ideal para cualquier momento.',
+    flavors:['Parmesano','Ajo','Caramelo','Salado','Limón Pimienta'],
+    variants:[{l:'Unidad',p:12500}] },
+  { id:6,  name:'Papas Snack Natural',          category:'snacks',       emoji:'🥔',
+    desc:'Papas snack naturales y crujientes en sabores irresistibles. Sin colorantes artificiales.',
+    flavors:['Lima-Limón','Bbq Dulce','Sal Rosada'],
+    variants:[{l:'25gr',p:3000},{l:'100gr',p:12000}] },
+  { id:7,  name:'Chips de Plátano',             category:'snacks',       emoji:'🍌',
+    desc:'Chips de plátano natural sin gluten. Disponible en plátano verde y maduro.',
+    flavors:['Sal Marina','Lima-Limón'],
+    variants:[{l:'30gr',p:3000}] },
+  { id:8,  name:'Chicharrón Natural',           category:'snacks',       emoji:'🥓',
+    desc:'Chicharrón sin conservantes, súper crujiente y sabroso. Snack alto en proteína.',
+    flavors:['Lima-Limón','Sal Marina'],
+    variants:[{l:'30gr',p:6000},{l:'90gr',p:18000}] },
+  { id:9,  name:'Mini Galletas Saludables',     category:'snacks',       emoji:'🍪',
+    desc:'Con avena, semillas de chía y stevia. Dulces, nutritivas y sin culpa.',
+    flavors:['Chocolate','Frutos Rojos','Canela'],
+    variants:[{l:'Bolsa',p:3000}] },
+  { id:10, name:'Nuez de Brasil',               category:'frutos-secos', emoji:'🌰',
+    desc:'Fuente natural de selenio y antioxidantes. Crudas y sin sal añadida.',
+    variants:[{l:'40gr',p:6200},{l:'125gr',p:17500},{l:'250gr',p:35000},{l:'500gr',p:61000}] },
+  { id:11, name:'Maní Natural',                 category:'frutos-secos', emoji:'🥜',
+    desc:'Maní natural, excelente fuente de proteína vegetal. Solo o con uva pasa.',
+    flavors:['Maní + Uva Pasa','Maní Salado'],
+    variants:[{l:'Salado 125gr',p:5000},{l:'+ Uva Pasa 125gr',p:5500},{l:'+ Uva Pasa 250gr',p:8500},{l:'+ Uva Pasa 500gr',p:16000}] },
+  { id:12, name:'Almendras',                    category:'frutos-secos', emoji:'🫘',
+    desc:'Almendras naturales ricas en vitamina E, proteína y grasas saludables.',
+    variants:[{l:'50gr',p:5600},{l:'125gr',p:12700},{l:'500gr',p:25000}] },
+  { id:13, name:'Marañón (Cashew)',             category:'frutos-secos', emoji:'🌰',
+    desc:'Marañón natural, cremoso y nutritivo. Fuente de vitaminas del complejo B.',
+    variants:[{l:'100gr',p:16000},{l:'250gr',p:27500}] },
+  { id:14, name:'Mix Frutos Secos',             category:'frutos-secos', emoji:'🥜',
+    desc:'Mix premium: almendra, nuez pecan, macadamia, nuez de brasil y marañón.',
+    variants:[{l:'50gr',p:8000},{l:'100gr',p:12500},{l:'250gr',p:30000}] },
+  { id:15, name:'Mix Armonía',                  category:'frutos-secos', emoji:'✨',
+    desc:'Mix especial de macadamia, marañón, semilla de calabaza y arándano deshidratado.',
+    variants:[{l:'200gr',p:25000}] },
+  { id:16, name:'Flor de Jamaica',              category:'frutos-secos', emoji:'🌺',
+    desc:'Flor de jamaica deshidratada rica en antioxidantes. Ideal para té o agua fresca.',
+    variants:[{l:'50gr',p:8300},{l:'125gr',p:20000}] },
+  { id:17, name:'Arándanos Deshidratados',      category:'frutos-secos', emoji:'🫐',
+    desc:'Arándanos deshidratados naturales, llenos de antioxidantes y vitaminas.',
+    variants:[{l:'125gr',p:11000}] },
+  { id:18, name:'Semilla de Calabaza',          category:'frutos-secos', emoji:'🎃',
+    desc:'Semillas de calabaza naturales, fuente de magnesio, zinc y proteína vegetal.',
+    variants:[{l:'100gr',p:8400}] },
+  { id:19, name:'Yogurt Griego Premium 150g',   category:'lacteos',      emoji:'🥛',
+    desc:'Artesanal, endulzado con stevia. 11g de proteína por porción. Sin azúcares añadidas.',
+    flavors:['Vainilla','Vainilla+Coco','Vainilla+Piña','Coco','Vainilla+Fresa','Vainilla+Frutos Rojos','Vainilla+Arándanos'],
+    variants:[{l:'150g',p:8300}] },
+  { id:20, name:'Yogurt Griego Entero 550g',    category:'lacteos',      emoji:'🥛',
+    desc:'Textura muy cremosa, hecho con leche entera. 14g de proteína. Sin azúcares añadidas.',
+    variants:[{l:'550g',p:26000}] },
+  { id:21, name:'Yogurt Griego Natural 550g',   category:'lacteos',      emoji:'🥛',
+    desc:'Sin dulce, libre de grasa, sin edulcorantes. 13g de proteína por porción.',
+    variants:[{l:'550g',p:26000}] },
+  { id:22, name:'Yogurt Griego Vainilla 550g',  category:'lacteos',      emoji:'🥛',
+    desc:'Premium artesanal sabor vainilla, endulzado con stevia. 11g de proteína.',
+    variants:[{l:'550g',p:26000}] },
+  { id:23, name:'Kéfir de Sabores',             category:'lacteos',      emoji:'🫙',
+    desc:'55 tipos de bacterias vivas. 10g de proteína. Libre de grasa. Sin azúcares añadidas.',
+    flavors:['Manzana','Kiwi','Sandía','Fresa','Piña','Hierbabuena','Sin Dulce'],
+    variants:[{l:'1 Litro',p:35000}] },
+  { id:24, name:'Queso para Untar',             category:'lacteos',      emoji:'🧀',
+    desc:'Queso artesanal para untar, saludable y delicioso. Variedad Ricotta y Kéfir.',
+    flavors:['Queso Ricotta','Queso Kéfir'],
+    variants:[{l:'270g',p:19500}] },
+  { id:25, name:'Postres de Yogurt Griego',     category:'lacteos',      emoji:'🍮',
+    desc:'Postres artesanales sin azúcares añadidas. Buena fuente de proteína.',
+    flavors:['Mousse de Maracuyá','Panna Cotta Choco & Avellanas','Pie de Limón'],
+    variants:[{l:'180g',p:12800}] },
+  { id:26, name:'Magnesio',                     category:'suplementos',  emoji:'✨',
+    desc:'400+ funciones comprobadas. Reduce el estrés, mejora el sueño, alivia dolores de cabeza.',
+    flavors:['Limonada de Coco','Jengibre','Limonada Rosada'],
+    variants:[{l:'Presentación básica',p:30000},{l:'Premium',p:80000}] },
+  { id:27, name:'Proteína de Hueso de Pollo',   category:'suplementos',  emoji:'💪',
+    desc:'18g proteína + 9.9g colágeno por porción. Sin azúcar añadida, sin lácteos, sin químicos.',
+    flavors:['Caramelo','Vainilla','Chocolate'],
+    variants:[{l:'Tarro',p:190000}] },
+  { id:28, name:'InnerBloom',                   category:'suplementos',  emoji:'🌸',
+    desc:'Equilibrio hormonal y metabólico femenino. Inositol, Vit. A/D/E, Hierro, Zinc, Metilfolato.',
+    flavors:['Frutos Rojos'],
+    variants:[{l:'Tarro',p:170000}] },
+  { id:29, name:'Mantequilla Ghee',             category:'aceites',      emoji:'🧈',
+    desc:'Mantequilla clarificada ayurveda. Para freír o untar. Antinflamatoria y antioxidante.',
+    variants:[{l:'200gr',p:22000},{l:'420gr',p:45000},{l:'640gr',p:62000}] },
+  { id:30, name:'Aceite de Coco',               category:'aceites',      emoji:'🥥',
+    desc:'Aceite de coco puro y natural. Ideal para cocinar, hornear y consumo directo.',
+    variants:[{l:'175gr',p:15000},{l:'420gr',p:30000}] },
+  { id:31, name:'Vinagre de Manzana con la Madre', category:'aceites',   emoji:'🍎',
+    desc:'Promueve pérdida de grasa, desintoxicante natural, mejora digestión y reduce colesterol.',
+    variants:[{l:'Frasco',p:35000}] },
+  { id:32, name:'Vinagre Especiado',            category:'aceites',      emoji:'🌿',
+    desc:'Vinagre de manzana potenciado con pimienta negra, penca de sábila y cúrcuma.',
+    variants:[{l:'Frasco',p:38000}] },
+  { id:33, name:'Avena y Harinas',              category:'harinas',      emoji:'🌾',
+    desc:'Avena en hojuelas y harinas especiales para una repostería más saludable y nutritiva.',
+    variants:[{l:'Avena hojuelas 1kg',p:30000},{l:'Harina de avena',p:38000},{l:'Harina de almendra',p:30000}] },
+  { id:34, name:'Mezclas para Hornear',         category:'harinas',      emoji:'🎂',
+    desc:'Libres de gluten, azúcar, lácteos y conservantes. ¡Solo agrega ingredientes frescos!',
+    flavors:['Brownie','Vainilla','Banano'],
+    variants:[{l:'Base de avena',p:33000},{l:'Base de almendra',p:42000}] },
+  { id:35, name:'Cremas Untables',              category:'cremas',       emoji:'🍫',
+    desc:'Artesanales, sin azúcar, sin lácteos, sin gluten. El indulgente saludable que buscabas.',
+    flavors:['Cacao y Avellanas','Cacao Avellanas Crocante','Pistacho'],
+    variants:[{l:'Cacao y Avellanas',p:48000},{l:'Cacao Crocante',p:58000},{l:'Pistacho',p:48000}] },
+  { id:36, name:'Aguas Gasificadas',            category:'bebidas',      emoji:'💧',
+    desc:'Aguas gasificadas artesanales en sabores naturales. Refrescantes y sin azúcar añadida.',
+    flavors:['Flor de Jamaica','Uva','Hierbabuena','Arándano','Aloe Vera','Limón y Jengibre'],
+    variants:[{l:'Botella',p:6500}] },
+  { id:37, name:'Stevia Natural',               category:'edulcorantes', emoji:'🍃',
+    desc:'Stevia artesanal en distintas presentaciones y sabores. Endulza sin calorías.',
+    flavors:['Natural','Vainilla','Caramelo'],
+    variants:[{l:'60ml',p:14500},{l:'250ml',p:30000}] },
+];
+
+/* ─── ESTADO ─── */
+let activeCat   = 'all';
+let activePrice = 'all';
+let query       = '';
+
+/* ─── HELPERS ─── */
+const fmt = n => '$' + n.toLocaleString('es-CO');
+const minP = p => Math.min(...p.variants.map(v => v.p));
+const SKIP = new Set(['Unidad','Botella','Bolsa','Frasco','Tarro','Gramo']);
+
+function matchesPrice(product, priceId) {
+  if (priceId === 'all') return true;
+  const pf = PRICES.find(o => o.id === priceId);
+  return product.variants.some(v => v.p >= pf.min && v.p <= pf.max);
+}
+
+function matchesSearch(product, q) {
+  if (!q) return true;
+  const hay = [product.name, product.desc, ...(product.flavors||[]), ...product.variants.map(v=>v.l)].join(' ').toLowerCase();
+  return hay.includes(q.toLowerCase());
+}
+
+/* Count products for sidebar — each filter group counts ignoring its own filter */
+function catCount(catKey) {
+  return PRODUCTS.filter(p =>
+    (catKey === 'all' || p.category === catKey) &&
+    matchesPrice(p, activePrice) &&
+    matchesSearch(p, query)
+  ).length;
+}
+
+function priceCount(priceId) {
+  return PRODUCTS.filter(p =>
+    (activeCat === 'all' || p.category === activeCat) &&
+    matchesPrice(p, priceId) &&
+    matchesSearch(p, query)
+  ).length;
+}
+
+/* ─── FILTERED LIST ─── */
+function filtered() {
+  return PRODUCTS.filter(p =>
+    (activeCat === 'all' || p.category === activeCat) &&
+    matchesPrice(p, activePrice) &&
+    matchesSearch(p, query)
+  );
+}
+
+/* ─── WA LINK ─── */
+function waLink(p) {
+  let msg = `Hola Hary! 😊 Me interesa *${p.name}* 🌿\n\n_${p.desc}_\n\n`;
+  if (p.flavors?.length) msg += `*Sabores:* ${p.flavors.join(', ')}\n`;
+  if (p.variants.length === 1) {
+    const v = p.variants[0];
+    msg += `*Precio:* ${SKIP.has(v.l)?'':v.l+' — '}${fmt(v.p)}\n`;
+  } else {
+    msg += `*Presentaciones:*\n`;
+    p.variants.forEach(v => { msg += `  • ${v.l}: ${fmt(v.p)}\n`; });
+  }
+  msg += `\n¿Está disponible? ¿Cómo hago el pedido?`;
+  return `https://wa.me/573148375549?text=${encodeURIComponent(msg)}`;
+}
+
+/* ─── RENDER CARD ─── */
+function renderCard(p, delay) {
+  const cat = CATS[p.category];
+  const single = p.variants.length === 1;
+  const flavorsHtml = p.flavors?.length ? `
+    <div class="flavors">
+      <div class="flavors-lbl">Sabores</div>
+      <div class="flavor-list">${p.flavors.map(f=>`<span class="flavor-tag">${f}</span>`).join('')}</div>
+    </div>` : '';
+  let pricesHtml;
+  if (single) {
+    const v = p.variants[0];
+    const lbl = SKIP.has(v.l) ? '' : `<span class="price-size-lbl">${v.l}</span>`;
+    pricesHtml = `<div class="prices"><span class="price-single">${fmt(v.p)}</span>${lbl}</div>`;
+  } else {
+    const rows = p.variants.map(v=>`
+      <div class="price-row-item">
+        <span class="price-row-lbl">${v.l}</span>
+        <span class="price-row-val">${fmt(v.p)}</span>
+      </div>`).join('');
+    pricesHtml = `<div class="prices"><div class="price-desde">Desde ${fmt(minP(p))}</div>${rows}</div>`;
+  }
+  const WA_SVG = `<svg class="wa-svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+  return `
+    <div class="card" style="animation-delay:${delay}s">
+      <div class="card-stripe" style="background:${cat.color}"></div>
+      <div class="card-body">
+        <div class="card-top">
+          <span class="card-emoji">${p.emoji}</span>
+          <span class="cat-badge" style="background:${cat.light};color:${cat.color}">${cat.emoji} ${cat.name}</span>
+        </div>
+        <h3 class="product-name">${p.name}</h3>
+        <p class="product-desc">${p.desc}</p>
+        ${flavorsHtml}
+        ${pricesHtml}
+      </div>
+      <div class="card-footer">
+        <a class="wa-btn" href="${waLink(p)}" target="_blank" rel="noopener">
+          ${WA_SVG} Pedir por WhatsApp
+        </a>
+      </div>
+    </div>`;
+}
+
+/* ─── RENDER SIDEBAR ─── */
+function renderSidebar() {
+  /* categories */
+  const catList = document.getElementById('catList');
+  catList.innerHTML = Object.entries(CATS).map(([k, c]) => {
+    const count = catCount(k);
+    const isActive = activeCat === k;
+    return `
+      <li class="filter-item${isActive?' active':''}" onclick="setCat('${k}')">
+        <span class="filter-dot" style="background:${c.color}"></span>
+        <span class="filter-name">${c.emoji} ${c.name}</span>
+        <span class="filter-count${count===0?' zero':''}">${count}</span>
+      </li>`;
+  }).join('');
+
+  /* prices */
+  const priceList = document.getElementById('priceList');
+  priceList.innerHTML = PRICES.map(o => {
+    const count = priceCount(o.id);
+    const isActive = activePrice === o.id;
+    return `
+      <li class="filter-item filter-item-price${isActive?' active':''}" onclick="setPrice('${o.id}')">
+        <span class="price-ico">${o.ico}</span>
+        <span class="filter-name">${o.label}</span>
+        <span class="filter-count${count===0?' zero':''}">${count}</span>
+      </li>`;
+  }).join('');
+
+  /* clear buttons */
+  document.getElementById('clearCatBtn').classList.toggle('show', activeCat !== 'all');
+  document.getElementById('clearPriceBtn').classList.toggle('show', activePrice !== 'all');
+
+  /* active chips */
+  const chips = document.getElementById('activeChips');
+  const chipItems = [];
+  if (activeCat !== 'all') chipItems.push(`<span class="chip">${CATS[activeCat].emoji} ${CATS[activeCat].name} <span class="chip-x" onclick="setCat('all')">✕</span></span>`);
+  if (activePrice !== 'all') chipItems.push(`<span class="chip">💰 ${PRICES.find(o=>o.id===activePrice).label} <span class="chip-x" onclick="setPrice('all')">✕</span></span>`);
+  if (query) chipItems.push(`<span class="chip">🔍 "${query}" <span class="chip-x" onclick="clearSearch()">✕</span></span>`);
+  chips.innerHTML = chipItems.join('');
+  chips.classList.toggle('visible', chipItems.length > 0);
+
+  /* mobile filter badge */
+  const filterCount = (activeCat !== 'all' ? 1 : 0) + (activePrice !== 'all' ? 1 : 0) + (query ? 1 : 0);
+  const badge = document.getElementById('filterBadge');
+  const btn   = document.getElementById('filterToggleBtn');
+  badge.textContent = filterCount;
+  badge.classList.toggle('show', filterCount > 0);
+  btn.classList.toggle('has-filter', filterCount > 0);
+}
+
+/* ─── RENDER GRID ─── */
+function renderGrid() {
+  const list = filtered();
+  const grid = document.getElementById('grid');
+  const info = document.getElementById('resultsInfo');
+  document.getElementById('statTotal').textContent = PRODUCTS.length;
+  info.innerHTML = `Mostrando <strong>${list.length}</strong> de <strong>${PRODUCTS.length}</strong> productos`;
+  if (!list.length) {
+    grid.innerHTML = `
+      <div class="empty">
+        <div class="empty-ico">🔍</div>
+        <h3>No encontramos productos</h3>
+        <p>Intenta con otra búsqueda, categoría o rango de precio.</p>
+      </div>`;
+    return;
+  }
+  grid.innerHTML = list.map((p,i) => renderCard(p, Math.min(i*0.04, 0.5))).join('');
+}
+
+function render() { renderSidebar(); renderGrid(); }
+
+/* ─── ACTIONS ─── */
+function setCat(k)   { activeCat   = k; render(); }
+function setPrice(k) { activePrice = k; render(); }
+function clearSearch() { query = ''; document.getElementById('searchInput').value = ''; render(); }
+
+/* ─── MOBILE SIDEBAR ─── */
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('show');
+}
+
+/* ─── SEARCH ─── */
+document.getElementById('searchInput').addEventListener('input', e => {
+  query = e.target.value.trim();
+  render();
+});
+
+/* ─── SCROLL TOP ─── */
+window.addEventListener('scroll', () => {
+  document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300);
+}, {passive:true});
+
+/* ─── INIT ─── */
+render();
+</script>
+</body>
+</html>
