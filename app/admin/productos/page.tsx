@@ -11,6 +11,8 @@ async function getProducts(): Promise<SerializedProduct[]> {
     })
     return products.map(p => ({
       ...p,
+      images: (p as Record<string, unknown>).images as string[] ?? [],
+      imagesBlur: (p as Record<string, unknown>).imagesBlur as string[] ?? [],
       createdAt: p.createdAt.toISOString(),
       updatedAt: p.updatedAt.toISOString(),
     }))

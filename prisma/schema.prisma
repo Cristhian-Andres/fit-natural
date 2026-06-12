@@ -17,6 +17,8 @@ model Product {
   flavors     String[]  @default([])
   imageUrl    String?
   imageBlur   String?   @db.Text
+  images      String[]  @default([])
+  imagesBlur  String[]  @default([])
   active      Boolean   @default(true)
   sortOrder   Int       @default(0)
   createdAt   DateTime  @default(now())

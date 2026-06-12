@@ -13,6 +13,8 @@ async function getProduct(id: string): Promise<SerializedProduct | null> {
     if (!product) return null
     return {
       ...product,
+      images: (product as Record<string, unknown>).images as string[] ?? [],
+      imagesBlur: (product as Record<string, unknown>).imagesBlur as string[] ?? [],
       createdAt: product.createdAt.toISOString(),
       updatedAt: product.updatedAt.toISOString(),
     }

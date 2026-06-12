@@ -15,6 +15,8 @@ export interface Product {
   flavors: string[]
   imageUrl: string | null
   imageBlur: string | null
+  images: string[]
+  imagesBlur: string[]
   active: boolean
   sortOrder: number
   createdAt: Date
@@ -24,7 +26,6 @@ export interface Product {
 
 export type ProductWithVariants = Product & { variants: Variant[] }
 
-// Serialized version safe to pass from Server → Client components
 export type SerializedProduct = Omit<ProductWithVariants, 'createdAt' | 'updatedAt'> & {
   createdAt: string
   updatedAt: string

@@ -8,7 +8,9 @@ import { z } from 'zod'
 import { toast } from 'sonner'
 import { SerializedProduct } from '@/types'
 import { CATEGORY_OPTIONS } from '@/lib/constants'
-import ImageUpload from './ImageUpload'
+import MultiImageUpload from './MultiImageUpload'
+
+const MAX_IMAGES = 3
 
 const variantSchema = z.object({
   label: z.string().min(1, 'Requerido'),
@@ -21,14 +23,18 @@ const schema = z.object({
   emoji: z.string().min(1).max(4).default('🌿'),
   description: z.string().min(10, 'Mínimo 10 caracteres'),
   flavors: z.string().optional(),
-  imageUrl: z.string().optional(),
-  imageBlur: z.string().optional(),
+  images: z.array(z.string()).max(MAX_IMAGES).default([]),
+  imagesBlur: z.array(z.string()).max(MAX_IMAGES).default([]),
   active: z.boolean().default(true),
   sortOrder: z.coerce.number().int().default(0),
   variants: z.array(variantSchema).min(1, 'Agrega al menos una presentación'),
 })
 
 type FormValues = z.infer<typeof schema>
+
+function padArray(arr: string[], length: number): string[] {
+  return [...arr, ...Array(Math.max(0, length - arr.length)).fill('')]
+}
 
 interface Props {
   product?: SerializedProduct
@@ -38,6 +44,20 @@ export default function ProductForm({ product }: Props) {
   const router = useRouter()
   const isEdit = !!product
   const [saving, setSaving] = useState(false)
+  const [uploadingSlots, setUploadingSlots] = useState([false, false, false])
+
+  // Build initial images from existing data
+  const initialImages = product?.images?.filter(Boolean).length
+    ? padArray(product.images.filter(Boolean), MAX_IMAGES)
+    : product?.imageUrl
+      ? padArray([product.imageUrl], MAX_IMAGES)
+      : padArray([], MAX_IMAGES)
+
+  const initialBlurs = product?.imagesBlur?.filter(Boolean).length
+    ? padArray(product.imagesBlur.filter(Boolean), MAX_IMAGES)
+    : product?.imageBlur
+      ? padArray([product.imageBlur], MAX_IMAGES)
+      : padArray([], MAX_IMAGES)
 
   const { register, control, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -47,8 +67,8 @@ export default function ProductForm({ product }: Props) {
       emoji: product?.emoji ?? '🌿',
       description: product?.description ?? '',
       flavors: product?.flavors.join(', ') ?? '',
-      imageUrl: product?.imageUrl ?? '',
-      imageBlur: product?.imageBlur ?? '',
+      images: initialImages,
+      imagesBlur: initialBlurs,
       active: product?.active ?? true,
       sortOrder: product?.sortOrder ?? 0,
       variants: product?.variants.map(v => ({ label: v.label, price: v.price })) ?? [{ label: '', price: 0 }],
@@ -56,15 +76,22 @@ export default function ProductForm({ product }: Props) {
   })
 
   const { fields, append, remove } = useFieldArray({ control, name: 'variants' })
-  const imageUrl = watch('imageUrl')
-  const imageBlur = watch('imageBlur')
+  const images = watch('images')
+  const imagesBlur = watch('imagesBlur')
 
   async function onSubmit(data: FormValues) {
     setSaving(true)
     try {
+      const cleanImages = data.images.filter(Boolean)
+      const cleanBlurs = data.imagesBlur.filter(Boolean)
       const payload = {
         ...data,
         flavors: data.flavors ? data.flavors.split(',').map(f => f.trim()).filter(Boolean) : [],
+        images: cleanImages,
+        imagesBlur: cleanBlurs,
+        // Keep imageUrl/imageBlur in sync with first image for card thumbnails
+        imageUrl: cleanImages[0] || null,
+        imageBlur: cleanBlurs[0] || null,
       }
       const url = isEdit ? `/api/productos/${product!.id}` : '/api/productos'
       const method = isEdit ? 'PUT' : 'POST'
@@ -138,7 +165,7 @@ export default function ProductForm({ product }: Props) {
         {/* Flavors */}
         <div className="sm:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Sabores / Presentaciones <span className="text-gray-400 font-normal">(separados por coma)</span>
+            Sabores <span className="text-gray-400 font-normal">(separados por coma)</span>
           </label>
           <input
             {...register('flavors')}
@@ -164,13 +191,15 @@ export default function ProductForm({ product }: Props) {
         </div>
       </div>
 
-      {/* Image */}
+      {/* Multi Image Upload */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Imagen del producto</label>
-        <ImageUpload
-          value={imageUrl}
-          blur={imageBlur}
-          onChange={(url, blur) => { setValue('imageUrl', url); setValue('imageBlur', blur) }}
+        <label className="block text-sm font-medium text-gray-700 mb-2">Imágenes del producto</label>
+        <MultiImageUpload
+          values={images}
+          blurs={imagesBlur}
+          uploading={uploadingSlots}
+          onChange={(imgs, blrs) => { setValue('images', imgs); setValue('imagesBlur', blrs) }}
+          onUploadingChange={setUploadingSlots}
         />
       </div>
 
@@ -216,11 +245,7 @@ export default function ProductForm({ product }: Props) {
                 )}
               </div>
               {fields.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => remove(i)}
-                  className="text-red-400 hover:text-red-600 px-2 py-2 text-sm"
-                >
+                <button type="button" onClick={() => remove(i)} className="text-red-400 hover:text-red-600 px-2 py-2 text-sm">
                   ✕
                 </button>
               )}
@@ -230,19 +255,15 @@ export default function ProductForm({ product }: Props) {
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-3 pt-2">
+      <div className="flex items-center gap-3 pt-2 pb-4">
         <button
           type="submit"
-          disabled={saving}
+          disabled={saving || uploadingSlots.some(Boolean)}
           className="bg-brand-600 hover:bg-brand-700 disabled:opacity-60 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors"
         >
           {saving ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Crear producto'}
         </button>
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="text-gray-500 hover:text-gray-700 text-sm"
-        >
+        <button type="button" onClick={() => router.back()} className="text-gray-500 hover:text-gray-700 text-sm">
           Cancelar
         </button>
       </div>
