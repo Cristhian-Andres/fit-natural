@@ -3,7 +3,7 @@
 import { useMemo } from 'react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, PieChart, Pie, Cell, Legend,
+  ResponsiveContainer, Cell,
 } from 'recharts'
 import { SerializedProduct } from '@/types'
 import { fmt } from '@/lib/utils'
@@ -128,27 +128,18 @@ export default function Dashboard({ products }: Props) {
 
       {/* ── Charts fila 1 ── */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Categorías — Pie */}
+        {/* Categorías — Bar horizontal */}
         <ChartCard title="Productos por categoría">
           <ResponsiveContainer width="100%" height={240}>
-            <PieChart>
-              <Pie
-                data={categoryData}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                innerRadius={55}
-                outerRadius={90}
-                paddingAngle={2}
-                label={({ name, value }) => `${name} (${value})`}
-                labelLine={false}
-              >
-                {categoryData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
-              </Pie>
+            <BarChart data={categoryData} layout="vertical" margin={{ left: 0, right: 20, top: 4, bottom: 4 }}>
+              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f3f4f6" />
+              <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} allowDecimals={false} />
+              <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: '#374151' }} width={110} />
               <Tooltip formatter={(v: unknown) => [`${v}`, 'Productos']} />
-              <Legend formatter={(v) => <span className="text-xs text-gray-600">{v}</span>} />
-            </PieChart>
+              <Bar dataKey="value" radius={[0, 4, 4, 0]} maxBarSize={20}>
+                {categoryData.map((_, i) => <Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />)}
+              </Bar>
+            </BarChart>
           </ResponsiveContainer>
         </ChartCard>
 
