@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { SerializedProduct } from '@/types'
 import { CATEGORIES } from '@/lib/constants'
 import { fmt } from '@/lib/utils'
@@ -11,6 +12,7 @@ interface Props {
 }
 
 export default function ProductCard({ product }: Props) {
+  const router = useRouter()
   const cat = CATEGORIES[product.category] ?? CATEGORIES.all
   const minPrice = product.variants.length
     ? Math.min(...product.variants.map(v => v.price))
@@ -26,7 +28,13 @@ export default function ProductCard({ product }: Props) {
   const waUrl = `https://wa.me/${waNumber}?text=${waText}`
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
+    <div
+      className="bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col cursor-pointer
+        transition-all duration-200
+        hover:shadow-[6px_0_22px_-4px_rgba(124,179,66,0.35),_-6px_0_22px_-4px_rgba(124,179,66,0.35),_0_6px_20px_-4px_rgba(124,179,66,0.2)]
+        active:scale-[0.98] active:shadow-[3px_0_12px_-4px_rgba(124,179,66,0.4),_-3px_0_12px_-4px_rgba(124,179,66,0.4)]"
+      onClick={() => router.push(`/productos/${product.id}`)}
+    >
       {/* Image */}
       <div className="relative aspect-square bg-gray-100">
         {product.imageUrl ? (
@@ -110,6 +118,7 @@ export default function ProductCard({ product }: Props) {
         <div className="mt-1 flex gap-2">
           <Link
             href={`/productos/${product.id}`}
+            onClick={e => e.stopPropagation()}
             className="flex-1 flex items-center justify-center gap-1 border border-brand-600 text-brand-700 hover:bg-brand-50 text-sm font-semibold py-2 rounded-xl transition-colors"
           >
             Ver más
@@ -118,6 +127,7 @@ export default function ProductCard({ product }: Props) {
             href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={e => e.stopPropagation()}
             className="flex-1 flex items-center justify-center gap-1 bg-green-500 hover:bg-green-600 active:bg-green-700 text-white text-sm font-semibold py-2 rounded-xl transition-colors"
           >
             <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 flex-shrink-0">
