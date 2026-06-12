@@ -29,12 +29,13 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await request.json()
-  const { name, category, emoji, description, flavors, imageUrl, imageBlur, active, sortOrder, variants } = body
+  const { name, category, emoji, description, flavors, imageUrl, imageBlur, images, imagesBlur, stock, costPrice, active, sortOrder, variants } = body
 
   // Delete and recreate variants for simplicity
   await prisma.variant.deleteMany({ where: { productId: params.id } })
 
-  const product = await prisma.product.update({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const product = await (prisma.product.update as any)({
     where: { id: params.id },
     data: {
       name,
@@ -44,6 +45,10 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       flavors,
       imageUrl,
       imageBlur,
+      images: images ?? [],
+      imagesBlur: imagesBlur ?? [],
+      stock: stock ?? 0,
+      costPrice: costPrice ?? 0,
       active,
       sortOrder,
       variants: {

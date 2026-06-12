@@ -19,6 +19,8 @@ model Product {
   imageBlur   String?   @db.Text
   images      String[]  @default([])
   imagesBlur  String[]  @default([])
+  stock       Int       @default(0)
+  costPrice   Int       @default(0)
   active      Boolean   @default(true)
   sortOrder   Int       @default(0)
   createdAt   DateTime  @default(now())

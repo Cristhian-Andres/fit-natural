@@ -13,6 +13,8 @@ async function getProducts(): Promise<SerializedProduct[]> {
       ...p,
       images: (p as Record<string, unknown>).images as string[] ?? [],
       imagesBlur: (p as Record<string, unknown>).imagesBlur as string[] ?? [],
+      stock: (p as Record<string, unknown>).stock as number ?? 0,
+      costPrice: (p as Record<string, unknown>).costPrice as number ?? 0,
       createdAt: p.createdAt.toISOString(),
       updatedAt: p.updatedAt.toISOString(),
     }))

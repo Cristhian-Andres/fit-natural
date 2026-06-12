@@ -17,6 +17,8 @@ export interface Product {
   imageBlur: string | null
   images: string[]
   imagesBlur: string[]
+  stock: number
+  costPrice: number
   active: boolean
   sortOrder: number
   createdAt: Date

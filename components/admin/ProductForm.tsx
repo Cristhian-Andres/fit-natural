@@ -8,6 +8,7 @@ import { z } from 'zod'
 import { toast } from 'sonner'
 import { SerializedProduct } from '@/types'
 import { CATEGORY_OPTIONS } from '@/lib/constants'
+import { fmt } from '@/lib/utils'
 import MultiImageUpload from './MultiImageUpload'
 
 const MAX_IMAGES = 3
@@ -25,6 +26,8 @@ const schema = z.object({
   flavors: z.string().optional(),
   images: z.array(z.string()).max(MAX_IMAGES).default([]),
   imagesBlur: z.array(z.string()).max(MAX_IMAGES).default([]),
+  stock: z.coerce.number().int().min(0).default(0),
+  costPrice: z.coerce.number().int().min(0).default(0),
   active: z.boolean().default(true),
   sortOrder: z.coerce.number().int().default(0),
   variants: z.array(variantSchema).min(1, 'Agrega al menos una presentación'),
@@ -69,6 +72,8 @@ export default function ProductForm({ product }: Props) {
       flavors: product?.flavors.join(', ') ?? '',
       images: initialImages,
       imagesBlur: initialBlurs,
+      stock: product?.stock ?? 0,
+      costPrice: product?.costPrice ?? 0,
       active: product?.active ?? true,
       sortOrder: product?.sortOrder ?? 0,
       variants: product?.variants.map(v => ({ label: v.label, price: v.price })) ?? [{ label: '', price: 0 }],
@@ -78,11 +83,15 @@ export default function ProductForm({ product }: Props) {
   const { fields, append, remove } = useFieldArray({ control, name: 'variants' })
   const images = watch('images')
   const imagesBlur = watch('imagesBlur')
+  const costPrice = watch('costPrice') ?? 0
+  const firstVariantPrice = Number(watch('variants.0.price')) || 0
+  const ganancia = firstVariantPrice - costPrice
+  const margen = firstVariantPrice > 0 ? ((ganancia / firstVariantPrice) * 100).toFixed(1) : '0'
 
   async function onSubmit(data: FormValues) {
     setSaving(true)
     try {
-      const cleanImages = data.images.filter(Boolean)
+      const cleanImages = (data.images ?? []).filter(Boolean)
       const cleanBlurs = data.imagesBlur.filter(Boolean)
       const payload = {
         ...data,
@@ -189,6 +198,65 @@ export default function ProductForm({ product }: Props) {
             <span className="text-sm font-medium text-gray-700">Producto activo</span>
           </label>
         </div>
+      </div>
+
+      {/* ── Inventario y Costos ── */}
+      <div className="border border-gray-100 rounded-2xl p-4 bg-gray-50 space-y-4">
+        <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+          <span className="text-base">📦</span> Inventario y Costos
+        </h3>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Stock */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Cantidad en stock
+            </label>
+            <input
+              type="number"
+              min={0}
+              {...register('stock')}
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 bg-white"
+              placeholder="0"
+            />
+            {errors.stock && <p className="text-red-500 text-xs mt-1">{errors.stock.message}</p>}
+          </div>
+
+          {/* Precio de costo */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Precio de costo (COP)
+            </label>
+            <input
+              type="number"
+              min={0}
+              {...register('costPrice')}
+              className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 bg-white"
+              placeholder="0"
+            />
+            {errors.costPrice && <p className="text-red-500 text-xs mt-1">{errors.costPrice.message}</p>}
+          </div>
+        </div>
+
+        {/* Ganancia calculada */}
+        {firstVariantPrice > 0 && costPrice > 0 && (
+          <div className="grid grid-cols-3 gap-3 pt-1">
+            <div className="bg-white rounded-xl border border-gray-100 p-3 text-center">
+              <p className="text-xs text-gray-500 mb-0.5">Precio venta</p>
+              <p className="text-sm font-bold text-gray-800">{fmt(firstVariantPrice)}</p>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-100 p-3 text-center">
+              <p className="text-xs text-gray-500 mb-0.5">Costo</p>
+              <p className="text-sm font-bold text-gray-800">{fmt(costPrice)}</p>
+            </div>
+            <div className={`rounded-xl border p-3 text-center ${ganancia >= 0 ? 'bg-brand-50 border-brand-200' : 'bg-red-50 border-red-200'}`}>
+              <p className="text-xs text-gray-500 mb-0.5">Ganancia ({margen}%)</p>
+              <p className={`text-sm font-bold ${ganancia >= 0 ? 'text-brand-700' : 'text-red-600'}`}>
+                {fmt(ganancia)}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Multi Image Upload */}

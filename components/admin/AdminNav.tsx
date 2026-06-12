@@ -7,7 +7,8 @@ import { createBrowserClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
 
 const NAV = [
-  { href: '/admin/productos', label: 'Productos', icon: '📦' },
+  { href: '/admin', label: 'Dashboard', icon: '📊', exact: true },
+  { href: '/admin/productos', label: 'Productos', icon: '📦', exact: false },
 ]
 
 function NavContent({ onClose }: { onClose?: () => void }) {
@@ -41,7 +42,7 @@ function NavContent({ onClose }: { onClose?: () => void }) {
               href={item.href}
               onClick={onClose}
               className={`flex items-center gap-2 px-3 py-3 rounded-xl text-sm transition-colors ${
-                pathname.startsWith(item.href)
+                (item.exact ? pathname === item.href : pathname.startsWith(item.href))
                   ? 'bg-brand-600 text-white font-semibold'
                   : 'text-brand-200 hover:bg-brand-700'
               }`}

@@ -29,9 +29,10 @@ export async function POST(request: Request) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const body = await request.json()
-  const { name, category, emoji, description, flavors, imageUrl, imageBlur, active, sortOrder, variants } = body
+  const { name, category, emoji, description, flavors, imageUrl, imageBlur, images, imagesBlur, stock, costPrice, active, sortOrder, variants } = body
 
-  const product = await prisma.product.create({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const product = await (prisma.product.create as any)({
     data: {
       name,
       category,
@@ -40,6 +41,10 @@ export async function POST(request: Request) {
       flavors: flavors ?? [],
       imageUrl,
       imageBlur,
+      images: images ?? [],
+      imagesBlur: imagesBlur ?? [],
+      stock: stock ?? 0,
+      costPrice: costPrice ?? 0,
       active: active ?? true,
       sortOrder: sortOrder ?? 0,
       variants: {
