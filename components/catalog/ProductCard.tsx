@@ -29,14 +29,11 @@ export default function ProductCard({ product }: Props) {
 
   return (
     <div
-      className="product-card-glow bg-white rounded-2xl shadow-sm flex flex-col cursor-pointer
-        transition-all duration-200
-        hover:shadow-[6px_0_22px_-4px_rgba(124,179,66,0.3),_-6px_0_22px_-4px_rgba(124,179,66,0.3),_0_8px_24px_-4px_rgba(124,179,66,0.18)]
-        active:scale-[0.98]"
+      className="bg-white rounded-2xl shadow-sm hover:shadow-md overflow-hidden flex flex-col cursor-pointer transition-shadow duration-200"
       onClick={() => router.push(`/productos/${product.id}`)}
     >
       {/* Image */}
-      <div className="relative aspect-square bg-gray-100 overflow-hidden rounded-t-2xl">
+      <div className="relative aspect-square bg-gray-100">
         {product.imageUrl ? (
           <Image
             src={product.imageUrl}
