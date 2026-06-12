@@ -4,13 +4,13 @@ export default function Header() {
   return (
     <header className="bg-brand-700 text-white shadow-md sticky top-0 z-30">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-3">
-        <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-white/30">
+        <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-white/30 bg-[#8bc34a]">
           <Image
             src="/logo-fit-natural.jpeg"
             alt="Fit Natural"
             width={44}
             height={44}
-            className="w-full h-full object-cover scale-110"
+            className="w-full h-full object-cover scale-[1.4]"
             priority
           />
         </div>
