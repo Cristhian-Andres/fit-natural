@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createBrowserClient } from '@/lib/supabase/client'
@@ -26,8 +27,10 @@ function NavContent({ onClose }: { onClose?: () => void }) {
   return (
     <div className="flex flex-col h-full">
       <div className="p-5 border-b border-brand-700">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl">🌿</span>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-white/20">
+            <Image src="/logo-fit-natural.jpeg" alt="Fit Natural" width={40} height={40} className="w-full h-full object-cover scale-110" />
+          </div>
           <div>
             <p className="font-bold text-sm">Fit Natural</p>
             <p className="text-brand-300 text-xs">Admin</p>
@@ -87,7 +90,9 @@ export default function AdminNav() {
       {/* ── Mobile top bar ── */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 bg-brand-800 text-white h-14 flex items-center justify-between px-4 shadow-lg">
         <div className="flex items-center gap-2">
-          <span className="text-xl">🌿</span>
+          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-white/20">
+            <Image src="/logo-fit-natural.jpeg" alt="Fit Natural" width={32} height={32} className="w-full h-full object-cover scale-110" />
+          </div>
           <span className="font-bold text-sm">Fit Natural Admin</span>
         </div>
         <button

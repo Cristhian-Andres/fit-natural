@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { createBrowserClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
@@ -33,8 +34,8 @@ export default function LoginPage() {
 
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg mb-4">
-            <span className="text-3xl">🌿</span>
+          <div className="inline-block w-20 h-20 rounded-full overflow-hidden ring-4 ring-white/30 shadow-xl mb-4">
+            <Image src="/logo-fit-natural.jpeg" alt="Fit Natural" width={80} height={80} className="w-full h-full object-cover scale-110" priority />
           </div>
           <h1 className="text-2xl font-bold text-white">Fit Natural</h1>
           <p className="text-brand-300 text-sm mt-1">Panel de administración</p>

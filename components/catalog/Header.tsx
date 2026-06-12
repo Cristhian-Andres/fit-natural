@@ -1,9 +1,18 @@
+import Image from 'next/image'
+
 export default function Header() {
   return (
     <header className="bg-brand-700 text-white shadow-md sticky top-0 z-30">
       <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-3">
-        <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-2xl flex-shrink-0">
-          🌿
+        <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 ring-2 ring-white/30">
+          <Image
+            src="/logo-fit-natural.jpeg"
+            alt="Fit Natural"
+            width={44}
+            height={44}
+            className="w-full h-full object-cover scale-110"
+            priority
+          />
         </div>
         <div>
           <h1 className="text-xl font-bold leading-tight">Fit Natural</h1>
