@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import { SerializedProduct } from '@/types'
 import { CATEGORIES, CATEGORY_OPTIONS } from '@/lib/constants'
 import { fmt } from '@/lib/utils'
+import ConfirmDialog from '@/components/admin/ConfirmDialog'
 
 const PAGE_SIZE = 10
 
@@ -20,8 +21,12 @@ export default function ProductsManager({ products: allProducts }: Props) {
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('all')
   const [status, setStatus] = useState('all')
+  const [image, setImage] = useState('all')
   const [page, setPage] = useState(1)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [confirmTarget, setConfirmTarget] = useState<{ id: string; name: string } | null>(null)
+
+  const noImageCount = useMemo(() => allProducts.filter(p => !p.imageUrl).length, [allProducts])
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim()
@@ -29,10 +34,12 @@ export default function ProductsManager({ products: allProducts }: Props) {
       if (category !== 'all' && p.category !== category) return false
       if (status === 'active' && !p.active) return false
       if (status === 'inactive' && p.active) return false
+      if (image === 'missing' && p.imageUrl) return false
+      if (image === 'with' && !p.imageUrl) return false
       if (q && ![p.name, p.description, p.category].join(' ').toLowerCase().includes(q)) return false
       return true
     })
-  }, [allProducts, search, category, status])
+  }, [allProducts, search, category, status, image])
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
@@ -42,13 +49,15 @@ export default function ProductsManager({ products: allProducts }: Props) {
     setPage(1)
   }
 
-  async function handleDelete(id: string, name: string) {
-    if (!confirm(`¿Eliminar "${name}"? Esta acción no se puede deshacer.`)) return
+  async function confirmDelete() {
+    if (!confirmTarget) return
+    const { id } = confirmTarget
     setDeleting(id)
     try {
       const res = await fetch(`/api/productos/${id}`, { method: 'DELETE' })
       if (!res.ok) throw new Error()
       toast.success('Producto eliminado')
+      setConfirmTarget(null)
       router.refresh()
     } catch {
       toast.error('Error al eliminar el producto')
@@ -91,15 +100,24 @@ export default function ProductsManager({ products: allProducts }: Props) {
           <option value="active">✅ Activos</option>
           <option value="inactive">⚫ Ocultos</option>
         </select>
+        <select
+          value={image}
+          onChange={e => handleFilter(() => setImage(e.target.value))}
+          className="border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-brand-500 bg-white"
+        >
+          <option value="all">Todas las imágenes</option>
+          <option value="missing">🖼️ Sin imagen ({noImageCount})</option>
+          <option value="with">✅ Con imagen</option>
+        </select>
       </div>
 
       {/* ── Conteo ── */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-500">
           {filtered.length} producto{filtered.length !== 1 ? 's' : ''}
-          {(search || category !== 'all' || status !== 'all') && (
+          {(search || category !== 'all' || status !== 'all' || image !== 'all') && (
             <button
-              onClick={() => handleFilter(() => { setSearch(''); setCategory('all'); setStatus('all') })}
+              onClick={() => handleFilter(() => { setSearch(''); setCategory('all'); setStatus('all'); setImage('all') })}
               className="ml-2 text-brand-600 hover:underline"
             >
               Limpiar filtros
@@ -162,7 +180,7 @@ export default function ProductsManager({ products: allProducts }: Props) {
                         Editar
                       </Link>
                       <button
-                        onClick={() => handleDelete(p.id, p.name)}
+                        onClick={() => setConfirmTarget({ id: p.id, name: p.name })}
                         disabled={deleting === p.id}
                         className="text-xs bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg font-medium transition-colors disabled:opacity-50"
                       >
@@ -222,7 +240,7 @@ export default function ProductsManager({ products: allProducts }: Props) {
                     ✏️ Editar
                   </Link>
                   <button
-                    onClick={() => handleDelete(p.id, p.name)}
+                    onClick={() => setConfirmTarget({ id: p.id, name: p.name })}
                     disabled={deleting === p.id}
                     className="flex-1 text-center text-xs bg-red-50 text-red-600 hover:bg-red-100 px-3 py-2 rounded-xl font-semibold transition-colors disabled:opacity-50"
                   >
@@ -291,6 +309,17 @@ export default function ProductsManager({ products: allProducts }: Props) {
           </button>
         </div>
       )}
+
+      <ConfirmDialog
+        open={confirmTarget !== null}
+        title="¿Eliminar producto?"
+        description={confirmTarget ? `"${confirmTarget.name}" se eliminará permanentemente. Esta acción no se puede deshacer.` : undefined}
+        confirmLabel="Eliminar"
+        loading={deleting === confirmTarget?.id}
+        danger
+        onConfirm={confirmDelete}
+        onCancel={() => setConfirmTarget(null)}
+      />
     </div>
   )
 }
