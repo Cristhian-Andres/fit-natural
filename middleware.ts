@@ -1,10 +1,14 @@
 import { createServerClient, type CookieMethodsServer } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { ipAddress } from '@vercel/functions/headers'
 
 // ── Rate limiting ─────────────────────────────────────────────────────────────
-// In-memory per serverless instance. For multi-instance use Upstash Redis.
+// In-memory per serverless instance. For multi-instance use Upstash Redis,
+// or (recommended for real protection) a Vercel WAF rate_limit rule, since
+// Fluid Compute can run several concurrent instances each with their own map.
 const rlMap = new Map<string, { count: number; resetAt: number }>()
 const WINDOW_MS = 60_000
+const MAX_TRACKED_KEYS = 5_000 // hard cap so a flood of unique keys can't exhaust memory
 
 const RATE_LIMITS: Array<{ prefix: string; max: number }> = [
   { prefix: '/api/upload',    max: 10  },  // 10 uploads/min
@@ -26,10 +30,13 @@ function checkRateLimit(key: string, max: number): { ok: boolean; remaining: num
 
   if (!entry || now > entry.resetAt) {
     const resetAt = now + WINDOW_MS
-    rlMap.set(key, { count: 1, resetAt })
-    if (rlMap.size > 1000) {
-      rlMap.forEach((v, k) => { if (now > v.resetAt) rlMap.delete(k) })
+    if (rlMap.size >= MAX_TRACKED_KEYS) {
+      // Under active flood, expired entries may not exist yet — evict the
+      // oldest tracked key outright rather than let the map grow unbounded.
+      const oldestKey = rlMap.keys().next().value
+      if (oldestKey !== undefined) rlMap.delete(oldestKey)
     }
+    rlMap.set(key, { count: 1, resetAt })
     return { ok: true, remaining: max - 1, resetAt }
   }
 
@@ -50,6 +57,12 @@ function addSecurityHeaders(res: NextResponse): NextResponse {
 // ── Known attack tool User-Agent patterns ────────────────────────────────────
 const BLOCKED_UA = /sqlmap|nikto|nmap|masscan|zgrab|nuclei|dirsearch|hydra|burpsuite/i
 
+// ── CSRF ──────────────────────────────────────────────────────────────────────
+// Mutations are authenticated via cookies alone (no CSRF token), so reject any
+// cross-site Origin on state-changing API requests. Browsers always send
+// Origin on POST/PUT/PATCH/DELETE — same-origin admin requests are unaffected.
+const MUTATING_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE'])
+
 // ── Middleware ────────────────────────────────────────────────────────────────
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -60,13 +73,24 @@ export async function middleware(request: NextRequest) {
     return new NextResponse('Forbidden', { status: 403 })
   }
 
-  // 2. Rate limiting for API routes and login page
+  // 2. Reject cross-site mutating requests to the API
+  if (pathname.startsWith('/api/') && MUTATING_METHODS.has(request.method)) {
+    const origin = request.headers.get('origin')
+    if (origin) {
+      const originHost = (() => { try { return new URL(origin).host } catch { return null } })()
+      if (originHost !== request.nextUrl.host) {
+        return addSecurityHeaders(NextResponse.json({ error: 'Origen no permitido' }, { status: 403 }))
+      }
+    }
+  }
+
+  // 3. Rate limiting for API routes and login page
   const applyRateLimit = pathname.startsWith('/api/') || pathname === '/admin/login'
   if (applyRateLimit) {
-    const ip =
-      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
-      request.headers.get('x-real-ip') ??
-      'unknown'
+    // ipAddress() reads x-real-ip, set by Vercel's edge itself — unlike
+    // x-forwarded-for it can't be spoofed by a client-supplied header,
+    // which would otherwise let an attacker get a fresh counter per request.
+    const ip = ipAddress(request) ?? 'unknown'
     const max = getLimit(pathname)
     const scope = pathname.startsWith('/api/')
       ? pathname.split('/').slice(0, 3).join('/')
@@ -99,7 +123,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // 3. Admin route auth guard via Supabase session
+  // 4. Admin route auth guard via Supabase session
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
