@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { PUBLIC_PRODUCT_SELECT } from '@/lib/public-product'
 import { SerializedProduct } from '@/types'
 import Header from '@/components/catalog/Header'
 import CatalogClient from '@/components/catalog/CatalogClient'
@@ -10,15 +11,16 @@ async function getProducts(): Promise<SerializedProduct[]> {
   try {
     const products = await prisma.product.findMany({
       where: { active: true },
-      include: { variants: { orderBy: { sortOrder: 'asc' } } },
+      select: PUBLIC_PRODUCT_SELECT,
       orderBy: { sortOrder: 'asc' },
     })
     return products.map(p => ({
       ...p,
       images: (p as Record<string, unknown>).images as string[] ?? [],
       imagesBlur: (p as Record<string, unknown>).imagesBlur as string[] ?? [],
-      stock: (p as Record<string, unknown>).stock as number ?? 0,
-      costPrice: (p as Record<string, unknown>).costPrice as number ?? 0,
+      // No se exponen al publico: se rellenan con 0, el catalogo nunca los usa.
+      stock: 0,
+      costPrice: 0,
       createdAt: p.createdAt.toISOString(),
       updatedAt: p.updatedAt.toISOString(),
     }))

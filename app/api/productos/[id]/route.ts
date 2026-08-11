@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
+import { PUBLIC_PRODUCT_SELECT } from '@/lib/public-product'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
@@ -47,9 +48,10 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
     if (!CUID_RE.test(params.id)) {
       return NextResponse.json({ error: 'ID inválido' }, { status: 400 })
     }
+    // Publica y sin autenticacion: nunca debe devolver costPrice ni stock.
     const product = await prisma.product.findUnique({
       where: { id: params.id },
-      include: { variants: { orderBy: { sortOrder: 'asc' } } },
+      select: PUBLIC_PRODUCT_SELECT,
     })
     if (!product) return NextResponse.json({ error: 'No encontrado' }, { status: 404 })
     return NextResponse.json(product)

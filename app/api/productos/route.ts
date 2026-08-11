@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
+import { PUBLIC_PRODUCT_SELECT } from '@/lib/public-product'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
@@ -41,9 +42,10 @@ const productSchema = z.object({
 
 export async function GET() {
   try {
+    // Publica y sin autenticacion: nunca debe devolver costPrice ni stock.
     const products = await prisma.product.findMany({
       where: { active: true },
-      include: { variants: { orderBy: { sortOrder: 'asc' } } },
+      select: PUBLIC_PRODUCT_SELECT,
       orderBy: { sortOrder: 'asc' },
     })
     return NextResponse.json(products)
