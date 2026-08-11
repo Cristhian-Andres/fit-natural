@@ -58,7 +58,8 @@ export default function Dashboard({ products }: Props) {
   )
 
   const stockData = useMemo(() =>
-    [...products]
+    products
+      .filter(p => (p.stock ?? 0) > 0)
       .sort((a, b) => (b.stock ?? 0) - (a.stock ?? 0))
       .slice(0, 10)
       .map(p => ({ name: p.name.length > 22 ? p.name.slice(0, 20) + '…' : p.name, stock: p.stock ?? 0 })),
@@ -145,15 +146,21 @@ export default function Dashboard({ products }: Props) {
 
         {/* Stock por producto — Bar horizontal */}
         <ChartCard title="Stock por producto (Top 10)">
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={stockData} layout="vertical" margin={{ left: 0, right: 20, top: 4, bottom: 4 }}>
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f3f4f6" />
-              <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
-              <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: '#374151' }} width={110} />
-              <Tooltip formatter={(v: unknown) => [`${v}`, 'Unidades']} />
-              <Bar dataKey="stock" fill="#7cb342" radius={[0, 4, 4, 0]} maxBarSize={20} />
-            </BarChart>
-          </ResponsiveContainer>
+          {stockData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={Math.max(120, stockData.length * 34)}>
+              <BarChart data={stockData} layout="vertical" margin={{ left: 0, right: 20, top: 4, bottom: 4 }}>
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f3f4f6" />
+                <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} allowDecimals={false} />
+                <YAxis type="category" dataKey="name" tick={{ fontSize: 10, fill: '#374151' }} width={110} interval={0} />
+                <Tooltip formatter={(v: unknown) => [`${v}`, 'Unidades']} />
+                <Bar dataKey="stock" fill="#7cb342" radius={[0, 4, 4, 0]} maxBarSize={20} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="h-32 flex items-center justify-center text-sm text-gray-400">
+              Ningún producto tiene stock disponible
+            </div>
+          )}
         </ChartCard>
       </div>
 
