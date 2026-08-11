@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { prisma } from '@/lib/prisma'
 import { PUBLIC_PRODUCT_SELECT } from '@/lib/public-product'
 import { SerializedProduct } from '@/types'
@@ -35,7 +36,11 @@ export default async function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      <CatalogClient products={products} />
+      {/* Suspense: CatalogClient lee ?category= via useSearchParams sin
+          forzar renderizado dinamico en el resto de la pagina (sigue ISR). */}
+      <Suspense>
+        <CatalogClient products={products} />
+      </Suspense>
       <Footer />
     </div>
   )

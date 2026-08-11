@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useMemo, useCallback } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { SerializedProduct } from '@/types'
-import { PRICE_FILTERS } from '@/lib/constants'
+import { CATEGORIES, PRICE_FILTERS } from '@/lib/constants'
 import Sidebar from './Sidebar'
 import ProductCard from './ProductCard'
 
@@ -11,7 +12,11 @@ interface Props {
 }
 
 export default function CatalogClient({ products }: Props) {
-  const [category, setCategory] = useState('all')
+  const searchParams = useSearchParams()
+  const categoryParam = searchParams.get('category')
+  const [category, setCategory] = useState(
+    categoryParam && CATEGORIES[categoryParam] ? categoryParam : 'all'
+  )
   const [price, setPrice] = useState('all')
   const [search, setSearch] = useState('')
   const [sidebarOpen, setSidebarOpen] = useState(false)
