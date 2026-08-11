@@ -10,6 +10,9 @@
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    /* Firefox */
+    scrollbar-color: #7cb342 #f1f8e9;
+    scrollbar-width: thin;
   }
 
   body {
@@ -19,6 +22,30 @@
 
   * {
     box-sizing: border-box;
+  }
+
+  /* Chrome, Edge, Safari */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f8e9;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #7cb342;
+    border-radius: 999px;
+    border: 3px solid #f1f8e9;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #558b2f;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: #f1f8e9;
   }
 }
 
