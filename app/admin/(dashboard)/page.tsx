@@ -2,6 +2,8 @@ import { prisma } from '@/lib/prisma'
 import { SerializedProduct } from '@/types'
 import Dashboard from '@/components/admin/Dashboard'
 
+export const dynamic = 'force-dynamic'
+
 async function getAllProducts(): Promise<SerializedProduct[]> {
   try {
     const products = await prisma.product.findMany({

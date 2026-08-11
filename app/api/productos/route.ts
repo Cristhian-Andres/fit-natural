@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { revalidateTag } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { createServerClient } from '@supabase/ssr'
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
       include: { variants: true },
     })
 
-    revalidateTag('products')
+    revalidatePath('/')
     return NextResponse.json(product, { status: 201 })
   } catch {
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 })

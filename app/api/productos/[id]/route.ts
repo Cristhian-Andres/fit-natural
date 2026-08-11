@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { revalidateTag } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { createServerClient } from '@supabase/ssr'
@@ -99,7 +99,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       include: { variants: true },
     })
 
-    revalidateTag('products')
+    revalidatePath('/')
+    revalidatePath(`/productos/${params.id}`)
     return NextResponse.json(product)
   } catch {
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 })
@@ -116,7 +117,8 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
     }
 
     await prisma.product.delete({ where: { id: params.id } })
-    revalidateTag('products')
+    revalidatePath('/')
+    revalidatePath(`/productos/${params.id}`)
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 })
