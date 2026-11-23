@@ -7,7 +7,7 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 async function getAuthUser() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -32,9 +32,9 @@ const updateSchema = z.object({
   emoji:       z.string().max(4).optional().default('🌿'),
   description: z.string().min(5).max(2000),
   flavors:     z.array(z.string().max(60)).max(20).optional().default([]),
-  imageUrl:    z.string().url().nullable().optional(),
+  imageUrl:    z.url().nullable().optional(),
   imageBlur:   z.string().max(500).nullable().optional(),
-  images:      z.array(z.string().url()).max(3).optional().default([]),
+  images:      z.array(z.url()).max(3).optional().default([]),
   imagesBlur:  z.array(z.string().max(500)).max(3).optional().default([]),
   stock:       z.number().int().min(0).max(1_000_000).optional().default(0),
   costPrice:   z.number().int().min(0).max(100_000_000).optional().default(0),
@@ -43,14 +43,15 @@ const updateSchema = z.object({
   variants:    z.array(variantSchema).min(1).max(20),
 })
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
-    if (!CUID_RE.test(params.id)) {
+    if (!CUID_RE.test(id)) {
       return NextResponse.json({ error: 'ID inválido' }, { status: 400 })
     }
     // Publica y sin autenticacion: nunca debe devolver costPrice ni stock.
     const product = await prisma.product.findUnique({
-      where: { id: params.id },
+      where: { id: id },
       select: PUBLIC_PRODUCT_SELECT,
     })
     if (!product) return NextResponse.json({ error: 'No encontrado' }, { status: 404 })
@@ -60,12 +61,13 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
     const user = await getAuthUser()
     if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
-    if (!CUID_RE.test(params.id)) {
+    if (!CUID_RE.test(id)) {
       return NextResponse.json({ error: 'ID inválido' }, { status: 400 })
     }
 
@@ -75,17 +77,17 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
     const parsed = updateSchema.safeParse(body)
     if (!parsed.success) {
-      return NextResponse.json({ error: 'Datos inválidos', details: parsed.error.flatten() }, { status: 422 })
+      return NextResponse.json({ error: 'Datos inválidos', details: z.flattenError(parsed.error) }, { status: 422 })
     }
 
     const { name, category, emoji, description, flavors, imageUrl, imageBlur,
             images, imagesBlur, stock, costPrice, active, sortOrder, variants } = parsed.data
 
-    await prisma.variant.deleteMany({ where: { productId: params.id } })
+    await prisma.variant.deleteMany({ where: { productId: id } })
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const product = await (prisma.product.update as any)({
-      where: { id: params.id },
+      where: { id: id },
       data: {
         name, category, emoji, description,
         flavors, imageUrl, imageBlur,
@@ -102,25 +104,26 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     })
 
     revalidatePath('/')
-    revalidatePath(`/productos/${params.id}`)
+    revalidatePath(`/productos/${id}`)
     return NextResponse.json(product)
   } catch {
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 })
   }
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   try {
     const user = await getAuthUser()
     if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
-    if (!CUID_RE.test(params.id)) {
+    if (!CUID_RE.test(id)) {
       return NextResponse.json({ error: 'ID inválido' }, { status: 400 })
     }
 
-    await prisma.product.delete({ where: { id: params.id } })
+    await prisma.product.delete({ where: { id: id } })
     revalidatePath('/')
-    revalidatePath(`/productos/${params.id}`)
+    revalidatePath(`/productos/${id}`)
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 })

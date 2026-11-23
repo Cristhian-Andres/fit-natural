@@ -25,8 +25,9 @@ async function getProduct(id: string): Promise<SerializedProduct | null> {
   }
 }
 
-export default async function EditarProductoPage({ params }: { params: { id: string } }) {
-  const product = await getProduct(params.id)
+export default async function EditarProductoPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const product = await getProduct(id)
   if (!product) notFound()
 
   return (

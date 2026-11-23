@@ -141,5 +141,5 @@ lib/
 prisma/
   schema.prisma         → Modelos Product + Variant
   seed.ts               → 37 productos del catálogo PDF
-middleware.ts           → Protección de rutas /admin/*
+proxy.ts                → Protección de rutas /admin/*
 ```

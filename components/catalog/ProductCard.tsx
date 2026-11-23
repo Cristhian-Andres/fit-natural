@@ -17,9 +17,6 @@ export default function ProductCard({ product }: Props) {
   const minPrice = product.variants.length
     ? Math.min(...product.variants.map(v => v.price))
     : null
-  const maxPrice = product.variants.length
-    ? Math.max(...product.variants.map(v => v.price))
-    : null
 
   const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER ?? '573148375549'
   const waText = encodeURIComponent(
