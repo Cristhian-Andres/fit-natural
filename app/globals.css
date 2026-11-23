@@ -86,3 +86,8 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Loader inicial: oculto antes del primer pintado si ya se vio en la sesion */
+html.fn-intro-seen [data-intro-loader] {
+  display: none;
+}
