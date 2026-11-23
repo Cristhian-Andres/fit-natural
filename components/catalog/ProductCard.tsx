@@ -1,138 +1,108 @@
-'use client'
-
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { Leaf } from 'lucide-react'
 import { SerializedProduct } from '@/types'
 import { CATEGORIES } from '@/lib/constants'
 import { fmt } from '@/lib/utils'
+import { productOrderLink } from '@/lib/whatsapp'
+import { WhatsAppIcon } from './icons'
 
 interface Props {
   product: SerializedProduct
+  sizes?: string
 }
 
-export default function ProductCard({ product }: Props) {
-  const router = useRouter()
+export default function ProductCard({
+  product,
+  sizes = '(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw',
+}: Props) {
   const cat = CATEGORIES[product.category] ?? CATEGORIES.all
+  const images = product.images?.filter(Boolean).length
+    ? product.images.filter(Boolean)
+    : product.imageUrl ? [product.imageUrl] : []
   const minPrice = product.variants.length
     ? Math.min(...product.variants.map(v => v.price))
     : null
+  const multiple = product.variants.length > 1
 
-  const waNumber = process.env.NEXT_PUBLIC_WA_NUMBER ?? '573148375549'
-  const waText = encodeURIComponent(
-    `Hola! Me interesa el producto: *${product.name}*${minPrice ? ` (desde ${fmt(minPrice)})` : ''}. ¿Tienen disponibilidad?`
-  )
-  const waUrl = `https://wa.me/${waNumber}?text=${waText}`
+  const orderUrl = productOrderLink({
+    name: product.name,
+    variant: product.variants.length === 1 ? product.variants[0].label : undefined,
+    price: minPrice,
+    fromPrice: multiple,
+  })
 
   return (
-    <div
-      className="bg-white rounded-2xl shadow-sm overflow-hidden flex flex-col cursor-pointer transition-all duration-200
-        hover:shadow-md hover:ring-2 hover:ring-brand-400/70"
-      onClick={() => router.push(`/productos/${product.id}`)}
-    >
-      {/* Image */}
-      <div className="relative aspect-square bg-gray-100">
-        {product.imageUrl ? (
-          <Image
-            src={product.imageUrl}
-            alt={product.name}
-            fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover"
-            placeholder={product.imageBlur ? 'blur' : 'empty'}
-            blurDataURL={product.imageBlur ?? undefined}
-          />
-        ) : (
-          <div
-            className="w-full h-full flex items-center justify-center text-5xl"
-            style={{ background: cat.light }}
-          >
-            {product.emoji}
-          </div>
-        )}
-        {/* Category badge */}
-        <span
-          className="absolute top-2 left-2 text-xs font-semibold px-2 py-0.5 rounded-full"
-          style={{ background: cat.light, color: cat.color }}
-        >
-          {cat.emoji} {cat.name}
-        </span>
-      </div>
+    <article className="group relative flex flex-col">
+      <Link
+        href={`/productos/${product.id}`}
+        className="flex flex-1 flex-col rounded-[22px] outline-none focus-visible:ring-2 focus-visible:ring-forest focus-visible:ring-offset-4 focus-visible:ring-offset-cream"
+      >
+        <div className="relative aspect-[4/5] overflow-hidden rounded-[22px] bg-cream-200">
+          {images.length > 0 ? (
+            <>
+              <Image
+                src={images[0]}
+                alt={product.name}
+                fill
+                sizes={sizes}
+                className={`object-contain p-4 mix-blend-multiply transition duration-500 ease-out group-hover:scale-[1.04] sm:p-6 ${
+                  images.length > 1 ? '[@media(hover:hover)]:group-hover:opacity-0' : ''
+                }`}
+              />
+              {images.length > 1 && (
+                <Image
+                  src={images[1]}
+                  alt=""
+                  fill
+                  sizes={sizes}
+                  className="hidden object-contain p-4 opacity-0 mix-blend-multiply transition duration-500 ease-out group-hover:scale-[1.04] sm:p-6 [@media(hover:hover)]:block [@media(hover:hover)]:group-hover:opacity-100"
+                />
+              )}
+            </>
+          ) : (
+            <div className="grid h-full w-full place-items-center text-forest/40">
+              <Leaf className="h-12 w-12" strokeWidth={1.25} />
+            </div>
+          )}
 
-      {/* Content */}
-      <div className="p-3 flex flex-col flex-1 gap-2">
-        <h3 className="font-semibold text-gray-900 text-sm line-clamp-2 leading-snug">
-          {product.name}
-        </h3>
-
-        <p className="text-gray-500 text-xs line-clamp-2 flex-1">
-          {product.description}
-        </p>
-
-        {/* Flavors */}
-        {product.flavors.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {product.flavors.slice(0, 3).map(f => (
-              <span key={f} className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                {f}
-              </span>
-            ))}
-            {product.flavors.length > 3 && (
-              <span className="text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
-                +{product.flavors.length - 3}
-              </span>
-            )}
-          </div>
-        )}
-
-        {/* Variants / Price */}
-        {product.variants.length > 0 && (
-          <div className="space-y-0.5">
-            {product.variants.length === 1 ? (
-              <p className="text-brand-700 font-bold text-base">
-                {fmt(product.variants[0].price)}
-              </p>
-            ) : (
-              <>
-                <p className="text-brand-700 font-bold text-base">
-                  Desde {fmt(minPrice!)}
-                </p>
-                <div className="flex flex-wrap gap-1">
-                  {product.variants.map(v => (
-                    <span key={v.id} className="text-xs text-gray-600 bg-gray-50 border border-gray-200 px-2 py-0.5 rounded">
-                      {v.label} · {fmt(v.price)}
-                    </span>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-        )}
-
-        {/* Botones */}
-        <div className="mt-1 flex gap-2">
-          <Link
-            href={`/productos/${product.id}`}
-            onClick={e => e.stopPropagation()}
-            className="flex-1 flex items-center justify-center gap-1 border border-brand-600 text-brand-700 hover:bg-brand-50 text-sm font-semibold py-2 rounded-xl transition-colors"
-          >
-            Ver más
-          </Link>
-          <a
-            href={waUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={e => e.stopPropagation()}
-            className="flex-1 flex items-center justify-center gap-1 bg-green-500 hover:bg-green-600 active:bg-green-700 text-white text-sm font-semibold py-2 rounded-xl transition-colors"
-          >
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 flex-shrink-0">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-              <path d="M12.002 0C5.373 0 .001 5.373.001 12c0 2.117.554 4.104 1.523 5.827L0 24l6.335-1.524A11.955 11.955 0 0012.002 24c6.628 0 12-5.373 12-12s-5.372-12-11.998-12zm0 21.818a9.809 9.809 0 01-4.996-1.368l-.357-.213-3.722.896.924-3.634-.232-.373A9.796 9.796 0 012.183 12c0-5.417 4.402-9.818 9.819-9.818 5.416 0 9.818 4.401 9.818 9.818 0 5.416-4.402 9.818-9.818 9.818z"/>
-            </svg>
-            Pedir
-          </a>
+          {multiple && (
+            <span className="absolute left-3 top-3 rounded-full bg-cream-100/90 px-2.5 py-1 text-[11px] font-semibold text-ink-soft backdrop-blur-sm">
+              {product.variants.length} presentaciones
+            </span>
+          )}
         </div>
-      </div>
-    </div>
+
+        <div className="flex flex-1 flex-col px-1 pt-3.5">
+          <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-ink-muted sm:text-[11px]">
+            {cat.name}
+          </p>
+          <h3 className="mt-1 line-clamp-2 text-[15px] font-semibold leading-snug text-ink sm:text-base">
+            {product.name}
+          </h3>
+          {product.flavors.length > 0 && (
+            <p className="mt-1 line-clamp-1 text-xs text-ink-muted">
+              {product.flavors.join(' · ')}
+            </p>
+          )}
+          {minPrice !== null && (
+            <p className="mt-auto pt-2.5 text-base font-bold text-forest sm:text-lg">
+              {multiple && <span className="mr-1 text-xs font-medium text-ink-muted">Desde</span>}
+              {fmt(minPrice)}
+            </p>
+          )}
+        </div>
+      </Link>
+
+      <a
+        href={orderUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Pedir ${product.name} por WhatsApp`}
+        className="absolute right-3 top-3 grid h-10 w-10 place-items-center rounded-full bg-forest text-cream-100 shadow-lg shadow-forest/20 transition duration-300 hover:scale-105 hover:bg-forest-dark focus-visible:opacity-100 [@media(hover:hover)]:translate-y-1 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:translate-y-0 [@media(hover:hover)]:group-hover:opacity-100"
+      >
+        <WhatsAppIcon className="h-[18px] w-[18px]" />
+      </a>
+    </article>
   )
 }
