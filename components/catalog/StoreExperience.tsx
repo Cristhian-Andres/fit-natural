@@ -6,8 +6,6 @@ import { X } from 'lucide-react'
 import { INSTAGRAM_URL, waLink } from '@/lib/whatsapp'
 import { InstagramIcon, WhatsAppIcon } from './icons'
 
-const INTRO_KEY = 'fn_intro_seen'
-const PROMO_KEY = 'fn_promo_seen'
 const INTRO_MS = 3000
 const INTRO_FADE_MS = 500
 const PROMO_DELAY_MS = 10_000
@@ -16,44 +14,33 @@ const PHRASE = ['Disfruta', 'de', 'una', 'alimentación', 'sana', 'y', 'conscien
 // Palabras resaltadas en lima: "sana y consciente."
 const HIGHLIGHT_FROM = 4
 
-function readFlag(key: string) {
-  try { return sessionStorage.getItem(key) === '1' } catch { return false }
-}
-function writeFlag(key: string) {
-  try { sessionStorage.setItem(key, '1') } catch { /* modo privado */ }
-}
-
 type IntroState = 'show' | 'leaving' | 'done'
 
+// Se monta una vez por carga de pagina (el layout de la tienda persiste al
+// navegar entre catalogo y fichas), asi que el loader y la invitacion
+// aparecen en cada carga o recarga, pero no en cada cambio de pagina interno.
 export default function StoreExperience() {
   const [intro, setIntro] = useState<IntroState>('show')
+  const [progressStarted, setProgressStarted] = useState(false)
   const [promoOpen, setPromoOpen] = useState(false)
   const dialogRef = useRef<HTMLDivElement>(null)
 
-  // Loader: 3 s contados desde el inicio de la navegacion, para que coincida
-  // con las animaciones CSS que arrancan antes de que React hidrate.
+  // Loader: 3 s completos desde que la app esta lista; la barra de progreso
+  // arranca en el mismo momento para terminar justo cuando se desvanece.
   useEffect(() => {
-    if (readFlag(INTRO_KEY)) {
-      const t = setTimeout(() => setIntro('done'), 0)
-      return () => clearTimeout(t)
-    }
-    const remaining = Math.max(0, INTRO_MS - performance.now())
     let fade: ReturnType<typeof setTimeout>
+    const frame = requestAnimationFrame(() => setProgressStarted(true))
     const t = setTimeout(() => {
-      writeFlag(INTRO_KEY)
       setIntro('leaving')
       fade = setTimeout(() => setIntro('done'), INTRO_FADE_MS)
-    }, remaining)
-    return () => { clearTimeout(t); clearTimeout(fade) }
+    }, INTRO_MS)
+    return () => { cancelAnimationFrame(frame); clearTimeout(t); clearTimeout(fade) }
   }, [])
 
   // Invitacion: 10 s de navegacion despues de que la tienda es visible.
   useEffect(() => {
-    if (intro !== 'done' || readFlag(PROMO_KEY)) return
-    const t = setTimeout(() => {
-      writeFlag(PROMO_KEY)
-      setPromoOpen(true)
-    }, PROMO_DELAY_MS)
+    if (intro !== 'done') return
+    const t = setTimeout(() => setPromoOpen(true), PROMO_DELAY_MS)
     return () => clearTimeout(t)
   }, [intro])
 
@@ -132,7 +119,13 @@ export default function StoreExperience() {
             </p>
 
             <div className="mt-10 h-1 w-48 overflow-hidden rounded-full bg-cream-100/15 sm:w-60">
-              <div className="h-full origin-left animate-progress rounded-full bg-lime" />
+              <div
+                className="h-full origin-left rounded-full bg-lime ease-linear"
+                style={{
+                  transform: progressStarted ? 'scaleX(1)' : 'scaleX(0)',
+                  transition: `transform ${INTRO_MS}ms cubic-bezier(0.65, 0, 0.35, 1)`,
+                }}
+              />
             </div>
           </div>
         </div>

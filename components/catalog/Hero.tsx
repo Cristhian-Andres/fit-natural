@@ -19,10 +19,6 @@ export default function Hero({ featured, totalProducts, totalCategories }: Props
     <section className="relative overflow-hidden">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 pb-14 pt-10 sm:px-6 lg:grid-cols-12 lg:gap-12 lg:px-8 lg:pb-24 lg:pt-16">
         <div className="animate-fade-up lg:col-span-6 lg:pt-8">
-          <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-forest/15 bg-cream-100 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-forest">
-            <span className="h-1.5 w-1.5 rounded-full bg-lime" />
-            Catálogo 2026
-          </p>
           <h1 className="font-display text-[2.75rem] font-medium leading-[1.02] tracking-tight text-ink sm:text-6xl lg:text-[4.5rem]">
             Comida real
             <br />
