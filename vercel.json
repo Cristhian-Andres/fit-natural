@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "app/api/keep-alive/route.ts": {
+      "experimentalTriggers": [{ "type": "schedule/v1beta" }]
+    }
+  },
+  "schedules": {
+    "supabase-keep-alive": {
+      "schedule": "0 8 * * *",
+      "timezone": "America/Bogota",
+      "function": "api/keep-alive"
+    }
+  }
+}
