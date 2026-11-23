@@ -63,8 +63,8 @@ const BLOCKED_UA = /sqlmap|nikto|nmap|masscan|zgrab|nuclei|dirsearch|hydra|burps
 // Origin on POST/PUT/PATCH/DELETE — same-origin admin requests are unaffected.
 const MUTATING_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE'])
 
-// ── Middleware ────────────────────────────────────────────────────────────────
-export async function middleware(request: NextRequest) {
+// ── Proxy ─────────────────────────────────────────────────────────────────────
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   // 1. Block known security scanning / exploit tools

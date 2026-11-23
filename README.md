@@ -21,7 +21,7 @@ Plataforma web empresarial para la tienda de alimentos naturales **Fit Natural**
 
 | Capa | Tecnología | Motivo |
 |------|-----------|--------|
-| Framework | Next.js 14 (App Router) | SSR/ISR, routing, API routes |
+| Framework | Next.js 16 (App Router) | SSR/ISR, routing, API routes |
 | Lenguaje | TypeScript | Tipado estricto |
 | Estilos | Tailwind CSS | Utilidades, paleta verde personalizada |
 | ORM | Prisma 5 | Tipado fuerte sobre PostgreSQL |
@@ -90,7 +90,7 @@ fit-natural/
 ├── types/
 │   └── index.ts                  # Interfaces Product, Variant, SerializedProduct
 │
-├── middleware.ts                 # Protección /admin/* con Supabase SSR
+├── proxy.ts                      # Protección /admin/* con Supabase SSR
 ├── next.config.mjs               # Remote patterns para next/image
 ├── tailwind.config.ts            # Paleta brand (verde) personalizada
 └── .env.example                  # Plantilla de variables de entorno

@@ -33,7 +33,9 @@ const schema = z.object({
   variants: z.array(variantSchema).min(1, 'Agrega al menos una presentación'),
 })
 
-type FormValues = z.infer<typeof schema>
+// With coerce/default, Zod 4 distinguishes the raw form input from the parsed output.
+type FormInput = z.input<typeof schema>
+type FormValues = z.output<typeof schema>
 
 function padArray(arr: string[], length: number): string[] {
   return [...arr, ...Array(Math.max(0, length - arr.length)).fill('')]
@@ -62,7 +64,7 @@ export default function ProductForm({ product }: Props) {
       ? padArray([product.imageBlur], MAX_IMAGES)
       : padArray([], MAX_IMAGES)
 
-  const { register, control, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormValues>({
+  const { register, control, handleSubmit, setValue, watch, formState: { errors } } = useForm<FormInput, unknown, FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: product?.name ?? '',
@@ -81,9 +83,9 @@ export default function ProductForm({ product }: Props) {
   })
 
   const { fields, append, remove } = useFieldArray({ control, name: 'variants' })
-  const images = watch('images')
-  const imagesBlur = watch('imagesBlur')
-  const costPrice = watch('costPrice') ?? 0
+  const images = watch('images') ?? []
+  const imagesBlur = watch('imagesBlur') ?? []
+  const costPrice = Number(watch('costPrice')) || 0
   const firstVariantPrice = Number(watch('variants.0.price')) || 0
   const ganancia = firstVariantPrice - costPrice
   const margen = firstVariantPrice > 0 ? ((ganancia / firstVariantPrice) * 100).toFixed(1) : '0'
