@@ -78,10 +78,6 @@ const config: Config = {
           from: { opacity: '0', transform: 'scale(0.6)' },
           to: { opacity: '1', transform: 'scale(1)' },
         },
-        progress: {
-          from: { transform: 'scaleX(0)' },
-          to: { transform: 'scaleX(1)' },
-        },
         'modal-in': {
           from: { opacity: '0', transform: 'translateY(12px) scale(0.96)' },
           to: { opacity: '1', transform: 'translateY(0) scale(1)' },
@@ -95,7 +91,6 @@ const config: Config = {
         'spin-slow': 'spin 9s linear infinite',
         'pulse-soft': 'pulse-soft 2.4s ease-in-out infinite',
         'pop-in': 'pop-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both',
-        progress: 'progress 2.8s cubic-bezier(0.65, 0, 0.35, 1) both',
         'modal-in': 'modal-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both',
       },
     },
