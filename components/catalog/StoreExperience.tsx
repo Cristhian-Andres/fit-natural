@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { X } from 'lucide-react'
 import { INSTAGRAM_URL, waLink } from '@/lib/whatsapp'
@@ -12,7 +12,9 @@ const INTRO_MS = 3000
 const INTRO_FADE_MS = 500
 const PROMO_DELAY_MS = 10_000
 
-const PHRASE = ['Come', 'sano,', 'cuida', 'tu', 'salud.']
+const PHRASE = ['Disfruta', 'de', 'una', 'alimentación', 'sana', 'y', 'consciente.']
+// Palabras resaltadas en lima: "sana y consciente."
+const HIGHLIGHT_FROM = 4
 
 function readFlag(key: string) {
   try { return sessionStorage.getItem(key) === '1' } catch { return false }
@@ -89,7 +91,7 @@ export default function StoreExperience() {
           <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 animate-float rounded-full bg-lime/20 blur-3xl sm:h-96 sm:w-96" />
           <div className="pointer-events-none absolute -bottom-32 -right-20 h-80 w-80 animate-float rounded-full bg-lime/10 blur-3xl [animation-delay:-3s] sm:h-[28rem] sm:w-[28rem]" />
 
-          <div className="relative flex w-full max-w-md flex-col items-center text-center">
+          <div className="relative flex w-full max-w-3xl flex-col items-center text-center">
             <div className="relative grid h-28 w-28 place-items-center sm:h-32 sm:w-32">
               <span className="absolute inset-0 animate-spin-slow rounded-full border border-dashed border-lime/50" />
               <span className="absolute inset-3 animate-pulse-soft rounded-full bg-lime/15" />
@@ -109,20 +111,23 @@ export default function StoreExperience() {
               Fit Natural
             </p>
 
-            <h2 className="mt-3 font-display text-4xl font-medium leading-tight tracking-tight sm:text-5xl">
+            <h2 className="mt-3 font-display text-[2rem] font-medium leading-[1.12] tracking-tight sm:text-5xl lg:text-6xl">
               {PHRASE.map((word, i) => (
-                <span
-                  key={word}
-                  className={`inline-block animate-fade-up ${i >= 2 ? 'italic text-lime' : ''}`}
-                  style={{ animationDelay: `${450 + i * 220}ms` }}
-                >
-                  {word}
-                  {i < PHRASE.length - 1 && ' '}
-                </span>
+                <Fragment key={word}>
+                  {/* En pantallas medianas y grandes, "sana y consciente." va en su propia linea */}
+                  {i === HIGHLIGHT_FROM && <br className="hidden sm:inline" />}
+                  <span
+                    className={`inline-block animate-fade-up ${i >= HIGHLIGHT_FROM ? 'italic text-lime' : ''}`}
+                    style={{ animationDelay: `${400 + i * 170}ms` }}
+                  >
+                    {word}
+                    {i < PHRASE.length - 1 && ' '}
+                  </span>
+                </Fragment>
               ))}
             </h2>
 
-            <p className="mt-4 animate-fade-up text-sm text-cream-100/70 [animation-delay:1700ms] sm:text-base">
+            <p className="mt-4 animate-fade-up text-sm text-cream-100/70 [animation-delay:1800ms] sm:text-base">
               Alimentos naturales y saludables para tu día a día
             </p>
 
