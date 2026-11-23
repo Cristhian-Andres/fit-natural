@@ -1,15 +1,18 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Fraunces, Manrope } from 'next/font/google'
 import { Toaster } from 'sonner'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
+// Catalogo publico: serif organica para titulares + sans calida para texto.
+const display = Fraunces({ subsets: ['latin'], variable: '--font-display', axes: ['opsz', 'SOFT'] })
+const body = Manrope({ subsets: ['latin'], variable: '--font-body' })
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
-  themeColor: '#2e7d32',
+  themeColor: '#F4F0E6',
 }
 
 export const metadata: Metadata = {
@@ -25,7 +28,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={inter.variable}>
+    <html lang="es" className={`${inter.variable} ${display.variable} ${body.variable}`}>
       <body>
         {children}
         <Toaster richColors position="top-right" />

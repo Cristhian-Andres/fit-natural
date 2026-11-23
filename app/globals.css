@@ -11,7 +11,7 @@
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
     /* Firefox */
-    scrollbar-color: #7cb342 #f1f8e9;
+    scrollbar-color: #9DBF3A #F4F0E6;
     scrollbar-width: thin;
   }
 
@@ -31,21 +31,21 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #f1f8e9;
+    background: #F4F0E6;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #7cb342;
+    background: #9DBF3A;
     border-radius: 999px;
-    border: 3px solid #f1f8e9;
+    border: 3px solid #F4F0E6;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #558b2f;
+    background: #234530;
   }
 
   ::-webkit-scrollbar-corner {
-    background: #f1f8e9;
+    background: #F4F0E6;
   }
 }
 
@@ -73,5 +73,16 @@
 
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
